@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sitxplore-frontend
+  labels:
+    app: sitxplore-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sitxplore-frontend
+  template:
+    metadata:
+      labels:
+        app: sitxplore-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: sitxplore-frontend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: sitxplore-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer

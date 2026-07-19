@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sitxplore-backend
+  labels:
+    app: sitxplore-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sitxplore-backend
+  template:
+    metadata:
+      labels:
+        app: sitxplore-backend
+    spec:
+      containers:
+      - name: backend
+        image: sitxplore-backend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: PORT
+          value: "5000"
+        - name: MONGODB_URL
+          value: "mongodb://mongo-service:27017/sitxplore"
+        - name: JWT_SECRET
+          value: "supersecretjwtkey123!"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: sitxplore-backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP
