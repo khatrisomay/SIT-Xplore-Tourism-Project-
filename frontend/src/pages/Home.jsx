@@ -64,7 +64,7 @@ export default function Home() {
       <Navbar />
 
       <header 
-        className="relative py-20 md:py-32 px-6 overflow-hidden flex items-center justify-center border-b border-gray-200 dark:border-white/5 bg-cover bg-center"
+        className="relative py-20 md:py-32 px-6 overflow-hidden flex items-center justify-center bg-cover bg-center"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
       >
         {/* Overlay for readability and blurring */}
@@ -73,6 +73,9 @@ export default function Home() {
         {/* Background gradient decorative */}
         <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] rounded-full bg-brand-500/5 dark:bg-brand-500/10 blur-[120px] pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-5%] w-[45vw] h-[45vw] rounded-full bg-blue-500/5 blur-[150px] pointer-events-none" />
+
+        {/* Bottom smooth fade transition into page background */}
+        <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-[#ecebe6] via-[#ecebe6]/70 to-transparent dark:from-[#0b0c10] dark:via-[#0b0c10]/70 pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
           <span className="px-4 py-1.5 text-xs font-outfit font-bold tracking-widest uppercase rounded-full bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-400 border border-brand-200 dark:border-brand-500/20 inline-block animate-pulse">
