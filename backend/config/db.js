@@ -26,7 +26,14 @@ export const connectDB = async () => {
 
     // Auto-seed packages matching www.sitxplore.in
     const packageCount = await Package.countDocuments({});
-    if (packageCount < 6) {
+    
+    // Check if we need to upgrade from the old unsplash images to the real sitxplore.in images
+    const needsImageFix = await Package.findOne({
+      title: "Shimla – Manali Classic Combo",
+      bannerImage: /unsplash/
+    });
+
+    if (packageCount < 6 || needsImageFix) {
       // Clear legacy placeholders
       await Package.deleteMany({});
       
@@ -36,7 +43,7 @@ export const connectDB = async () => {
           category: "Weekend Getaways",
           duration: "5N/6D",
           description: "Enjoy a complete road trip from Delhi to Manali & Kasol in a comfortable Tempo Traveller. Perfect for groups, couples, and friends.",
-          bannerImage: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop",
+          bannerImage: "https://www.sitxplore.in/confused_me-mountain-3092438_1920.jpg",
           galleryImages: [],
           sharingPrices: {
             doubleSharing: 6999,
@@ -72,7 +79,7 @@ export const connectDB = async () => {
           category: "Domestic Trips",
           duration: "4N/5D",
           description: "Experience the spiritual journey to Kedarnath with comfortable travel and well-planned itinerary. Perfect for devotees and adventure lovers.",
-          bannerImage: "https://images.unsplash.com/photo-1626596147775-acb2827a4084?q=80&w=1200&auto=format&fit=crop",
+          bannerImage: "https://www.sitxplore.in/kedarnath%20wallpaper.jpg2.webp",
           galleryImages: [],
           sharingPrices: {
             doubleSharing: 7499,
@@ -106,7 +113,7 @@ export const connectDB = async () => {
           category: "Weekend Getaways",
           duration: "4N/5D",
           description: "Explore the hidden gems of Himachal with our Tirthan–Jibhi trip. Perfect for nature lovers, peace seekers, and offbeat travelers.",
-          bannerImage: "https://images.unsplash.com/photo-1605640840605-14ac1855827b?q=80&w=1200&auto=format&fit=crop",
+          bannerImage: "https://www.sitxplore.in/TIRTHAN%20VALLEY.webp",
           galleryImages: [],
           sharingPrices: {
             doubleSharing: 6499,
@@ -140,7 +147,7 @@ export const connectDB = async () => {
           category: "Domestic Trips",
           duration: "5N/6D",
           description: "Experience the best of Himachal with Shimla & Manali combo. Enjoy a comfortable journey with private vehicle arrangements based on your group size.",
-          bannerImage: "https://images.unsplash.com/photo-1609948543911-4c68b5f7f3b3?q=80&w=1200&auto=format&fit=crop",
+          bannerImage: "https://www.sitxplore.in/mall%20road%20shimla.jpg",
           galleryImages: [],
           sharingPrices: {
             doubleSharing: 14000,
@@ -159,7 +166,7 @@ export const connectDB = async () => {
           ],
           exclusions: [
             "Lunch on all days",
-            "Snow sports, skiing, or Rohtang pass permission fees",
+            "Snow activities and Rohtang pass permission fees",
             "Personal expenses"
           ],
           itinerary: [
