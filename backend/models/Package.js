@@ -18,7 +18,7 @@ const packageSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["Domestic Trips", "International Trips", "Weekend Getaways", "Hotel Booking", "Bike Rental"],
+      enum: ["Domestic Trips", "International Trips", "Weekend Getaways", "Hotel Booking", "Vehicle Rental"],
     },
     duration: { type: String, required: true }, // e.g., "3N/4D" or "4N/5D"
     description: { type: String, default: "" },

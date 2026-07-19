@@ -9,6 +9,9 @@ export const connectDB = async () => {
     await mongoose.connect(connStr);
     console.log("MongoDB connected successfully");
 
+    // Automatically migrate any existing 'Bike Rental' categories to 'Vehicle Rental'
+    await Package.updateMany({ category: "Bike Rental" }, { $set: { category: "Vehicle Rental" } });
+
     // Auto-seed admin user
     const adminCount = await User.countDocuments({ role: "admin" });
     if (adminCount === 0) {
@@ -24,16 +27,11 @@ export const connectDB = async () => {
       console.log("Auto-seeded admin user: admin@sitxplore.com / admin123");
     }
 
-    // Auto-seed packages matching www.sitxplore.in
+    // Auto-seed packages matching www.sitxplore.in plus hotel/bike rentals
     const packageCount = await Package.countDocuments({});
     
-    // Check if we need to upgrade from the old unsplash images to the real sitxplore.in images
-    const needsImageFix = await Package.findOne({
-      title: "Shimla – Manali Classic Combo",
-      bannerImage: /unsplash/
-    });
-
-    if (packageCount < 6 || needsImageFix) {
+    // Check if we need to upgrade to seed the hotel/bike rental options (needs 8 items total)
+    if (packageCount < 8) {
       // Clear legacy placeholders
       await Package.deleteMany({});
       
@@ -250,6 +248,68 @@ export const connectDB = async () => {
             { day: 5, title: "Manali to Delhi Return", description: "Explore the local markets, buy souvenirs, and board the evening vehicle back to Delhi." }
           ],
           slots: ["2026-08-14", "2026-08-28"]
+        },
+        {
+          title: "Himalayan Geodesic Swiss Domes",
+          category: "Hotel Booking",
+          duration: "1 Night",
+          description: "Book a luxurious stay in our premium geodesic domes located in the heart of Hampta Valley, Manali. Enjoy glass panels with direct mountain views, private wooden decks, attached bathrooms, and local Himachali hospitality.",
+          bannerImage: "https://www.sitxplore.in/TIRTHAN%20VALLEY.webp",
+          galleryImages: [],
+          sharingPrices: {
+            doubleSharing: 4500,
+            tripleSharing: 5500,
+            quadSharing: 6500,
+          },
+          bookingDeposit: 1500,
+          inclusions: [
+            "1 Night stay in Premium Heated Geodesic Dome",
+            "Welcome drink on arrival (Local Apple Cider)",
+            "Buffet Breakfast & Dinner included",
+            "Free High-Speed Wi-Fi connection",
+            "Access to stargazing campfire deck"
+          ],
+          exclusions: [
+            "Lunch and ala-carte food orders",
+            "Local transportation and sightseeing cabs",
+            "Personal items and laundry tips"
+          ],
+          itinerary: [
+            { day: 1, title: "Dome Check-in & Evening Campfire", description: "Check-in starts at 12:00 PM. Enjoy hot tea on the private deck. Experience stargazing around the shared bonfire in the evening." },
+            { day: 2, title: "Sunrise reflections & Check-out", description: "Wake up to stunning snow mountain views through the panoramic window. Enjoy a breakfast buffet before checking out by 11:00 AM." }
+          ],
+          slots: ["Daily Check-in Slots"]
+        },
+        {
+          title: "Royal Enfield Himalayan 411cc Rental",
+          category: "Vehicle Rental",
+          duration: "24 Hours",
+          description: "Rent the legendary adventure tourer Royal Enfield Himalayan 411cc in Manali. Perfect for riding up to Leh Ladakh, Spiti Valley, or local mountain exploration. Bikes are fully serviced, equipped with luggage racks, phone mounts, and dual-channel ABS.",
+          bannerImage: "https://www.sitxplore.in/confused_me-mountain-3092438_1920.jpg",
+          galleryImages: [],
+          sharingPrices: {
+            doubleSharing: 1800,
+            tripleSharing: 2200,
+            quadSharing: 1500,
+          },
+          bookingDeposit: 1000,
+          inclusions: [
+            "Royal Enfield Himalayan 411cc bike rental for 24 Hours",
+            "Two ISI-certified riding helmets",
+            "Luggage carrier racks & bungee cords",
+            "Basic mechanical tool kit & spare clutch cables",
+            "Phone mount with integrated USB charger"
+          ],
+          exclusions: [
+            "Fuel charges (delivered with empty/dry tank)",
+            "Refundable security deposit (₹5,000 in cash/UPI on pick up)",
+            "Any accidental damages or tire punctures"
+          ],
+          itinerary: [
+            { day: 1, title: "Bike Handover & Safety Briefing", description: "Collect your bike from our Manali garage after submitting valid ID proofs. Complete documentation and test drive." },
+            { day: 2, title: "Return Handover & Deposit Refund", description: "Bring back the bike within 24 hours with basic checks. Collect your security deposit refund after mechanical inspection." }
+          ],
+          slots: ["Daily Booking Available"]
         }
       ];
       await Package.insertMany(defaultPackages);

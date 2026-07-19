@@ -50,7 +50,7 @@ export default function Home() {
     }
   }, [activeCategory]);
 
-  const categories = ["All", "Domestic Trips", "International Trips", "Weekend Getaways"];
+  const categories = ["All", "Domestic Trips", "International Trips", "Weekend Getaways", "Hotel Booking", "Vehicle Rental"];
 
   const filteredPackages = packages.filter((pkg) => {
     const matchesCategory = activeCategory === "All" || pkg.category === activeCategory;

@@ -59,6 +59,16 @@ export default function Navbar() {
               Weekend Getaways
             </Link>
           </li>
+          <li>
+            <Link to="/?cat=Hotel Booking" className={`hover:text-brand-600 dark:hover:text-brand-400 transition-colors ${location.search.includes("Hotel") ? "text-brand-500 font-bold" : ""}`}>
+              Hotels
+            </Link>
+          </li>
+          <li>
+            <Link to="/?cat=Vehicle Rental" className={`hover:text-brand-600 dark:hover:text-brand-400 transition-colors ${location.search.includes("Vehicle") ? "text-brand-500 font-bold" : ""}`}>
+              Vehicle Rentals
+            </Link>
+          </li>
         </ul>
 
         {/* Right side: Theme Toggle & User Actions */}
@@ -151,6 +161,16 @@ export default function Navbar() {
             <li>
               <Link to="/?cat=Weekend Getaways" onClick={() => setIsOpen(false)} className="block hover:text-brand-600 dark:hover:text-brand-400">
                 Weekend Getaways
+              </Link>
+            </li>
+            <li>
+              <Link to="/?cat=Hotel Booking" onClick={() => setIsOpen(false)} className="block hover:text-brand-600 dark:hover:text-brand-400">
+                Hotels
+              </Link>
+            </li>
+            <li>
+              <Link to="/?cat=Vehicle Rental" onClick={() => setIsOpen(false)} className="block hover:text-brand-600 dark:hover:text-brand-400">
+                Vehicle Rentals
               </Link>
             </li>
           </ul>

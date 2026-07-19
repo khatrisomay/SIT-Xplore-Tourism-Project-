@@ -278,6 +278,8 @@ export default function Destinations() {
                   <option value="Domestic Trips" className="bg-dark-950">Domestic Trips</option>
                   <option value="International Trips" className="bg-dark-950">International Trips</option>
                   <option value="Weekend Getaways" className="bg-dark-950">Weekend Getaways</option>
+                  <option value="Hotel Booking" className="bg-dark-950">Hotel Booking</option>
+                  <option value="Vehicle Rental" className="bg-dark-950">Vehicle Rental</option>
                 </select>
               </div>
 
