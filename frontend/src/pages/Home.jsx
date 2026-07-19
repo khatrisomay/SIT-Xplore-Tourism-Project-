@@ -63,8 +63,12 @@ export default function Home() {
     <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300">
       <Navbar />
 
-      {/* Hero Section */}
-      <header className="relative py-20 md:py-32 px-6 overflow-hidden flex items-center justify-center border-b border-gray-200 dark:border-white/5 bg-[#f4f3ef]/40 dark:bg-transparent">
+      <header 
+        className="relative py-20 md:py-32 px-6 overflow-hidden flex items-center justify-center border-b border-gray-200 dark:border-white/5 bg-cover bg-center"
+        style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+      >
+        {/* Overlay for readability and blurring */}
+        <div className="absolute inset-0 bg-[#ecebe6]/80 dark:bg-[#0b0c10]/85 backdrop-blur-[2px] pointer-events-none" />
         
         {/* Background gradient decorative */}
         <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] rounded-full bg-brand-500/5 dark:bg-brand-500/10 blur-[120px] pointer-events-none" />
