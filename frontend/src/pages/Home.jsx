@@ -60,11 +60,11 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-[#f5f5f3] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300">
+    <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300">
       <Navbar />
 
       {/* Hero Section */}
-      <header className="relative py-20 md:py-32 px-6 overflow-hidden flex items-center justify-center border-b border-gray-200 dark:border-white/5 bg-[#fbfbf9]/60 dark:bg-transparent">
+      <header className="relative py-20 md:py-32 px-6 overflow-hidden flex items-center justify-center border-b border-gray-200 dark:border-white/5 bg-[#f4f3ef]/40 dark:bg-transparent">
         
         {/* Background gradient decorative */}
         <div className="absolute top-[-10%] right-[-5%] w-[40vw] h-[40vw] rounded-full bg-brand-500/5 dark:bg-brand-500/10 blur-[120px] pointer-events-none" />
@@ -85,7 +85,7 @@ export default function Home() {
           </p>
 
           {/* Search bar widget */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 bg-[#fbfbf9] dark:bg-[#111318]/90 border border-gray-200 dark:border-white/5 p-2 rounded-2xl max-w-xl mx-auto shadow-md dark:shadow-2xl backdrop-blur-xl mt-8">
+          <div className="flex flex-col sm:flex-row items-center gap-3 bg-[#f4f3ef] dark:bg-[#111318]/90 border border-gray-200 dark:border-white/5 p-2 rounded-2xl max-w-xl mx-auto shadow-md dark:shadow-2xl backdrop-blur-xl mt-8">
             <div className="flex items-center gap-3 px-3 w-full">
               <Search className="w-5 h-5 text-brand-500" />
               <input
@@ -113,7 +113,7 @@ export default function Home() {
               className={`px-5 py-2.5 rounded-full font-outfit text-xs font-semibold tracking-wider transition-all whitespace-nowrap shrink-0 border ${
                 activeCategory === cat
                   ? "bg-brand-50 text-black border-brand-500 shadow-md shadow-brand-500/10"
-                  : "bg-[#fbfbf9] dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10"
+                  : "bg-[#f4f3ef] dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border-gray-200 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/10"
               }`}
             >
               {cat}
@@ -126,9 +126,9 @@ export default function Home() {
       <main className="flex-grow py-8 px-6 max-w-7xl mx-auto w-full">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-10">
-            <div className="h-96 rounded-2xl bg-[#fbfbf9] dark:bg-white/5 border border-gray-200 dark:border-white/5 animate-pulse" />
-            <div className="h-96 rounded-2xl bg-[#fbfbf9] dark:bg-white/5 border border-gray-200 dark:border-white/5 animate-pulse" />
-            <div className="h-96 rounded-2xl bg-[#fbfbf9] dark:bg-white/5 border border-gray-200 dark:border-white/5 animate-pulse" />
+            <div className="h-96 rounded-2xl bg-[#f4f3ef] dark:bg-white/5 border border-gray-200 dark:border-white/5 animate-pulse" />
+            <div className="h-96 rounded-2xl bg-[#f4f3ef] dark:bg-white/5 border border-gray-200 dark:border-white/5 animate-pulse" />
+            <div className="h-96 rounded-2xl bg-[#f4f3ef] dark:bg-white/5 border border-gray-200 dark:border-white/5 animate-pulse" />
           </div>
         ) : filteredPackages.length === 0 ? (
           <div className="text-center py-20 space-y-4">
@@ -151,7 +151,7 @@ export default function Home() {
               return (
                 <article
                   key={pkg._id}
-                  className="group rounded-2xl overflow-hidden bg-[#fbfbf9] dark:bg-[#111318]/45 border border-gray-200 dark:border-white/5 flex flex-col h-full hover:border-brand-500/30 hover:shadow-lg hover:shadow-brand-500/5 transition-all duration-300 animate-fade-in"
+                  className="group rounded-2xl overflow-hidden bg-[#f4f3ef] dark:bg-[#111318]/45 border border-gray-200 dark:border-white/5 flex flex-col h-full hover:border-brand-500/30 hover:shadow-lg hover:shadow-brand-500/5 transition-all duration-300 animate-fade-in"
                 >
                   
                   {/* Package Banner */}
@@ -217,7 +217,7 @@ export default function Home() {
       </main>
 
       {/* Services Trust grid */}
-      <section className="bg-[#fbfbf9] dark:bg-[#0e1014] border-t border-b border-gray-200 dark:border-white/5 py-12 px-6">
+      <section className="bg-[#e6e4dc] dark:bg-[#0e1014] border-t border-b border-gray-200 dark:border-white/5 py-12 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex gap-4 items-start">
             <div className="p-3.5 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-600 dark:text-brand-500">

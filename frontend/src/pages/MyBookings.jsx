@@ -46,23 +46,23 @@ export default function MyBookings() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f3] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300">
+    <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300">
       <Navbar />
 
       <main className="flex-grow max-w-5xl mx-auto w-full px-6 py-12 space-y-8">
         
         <div className="space-y-2">
           <h2 className="font-outfit font-extrabold text-3xl text-slate-900 dark:text-white">My Booking Logs</h2>
-          <p className="text-sm text-gray-550 dark:text-gray-400">Manage your active tour packages and review payment confirmations.</p>
+          <p className="text-sm text-gray-550 dark:text-gray-405">Manage your active tour packages and review payment confirmations.</p>
         </div>
 
         {loading ? (
           <div className="space-y-4">
-            <div className="h-40 w-full rounded-2xl bg-[#fbfbf9] dark:bg-white/5 border border-gray-200 dark:border-white/5 animate-pulse" />
-            <div className="h-40 w-full rounded-2xl bg-[#fbfbf9] dark:bg-white/5 border border-gray-200 dark:border-white/5 animate-pulse" />
+            <div className="h-40 w-full rounded-2xl bg-[#f4f3ef] dark:bg-white/5 border border-[#d1cfc7] dark:border-white/5 animate-pulse" />
+            <div className="h-40 w-full rounded-2xl bg-[#f4f3ef] dark:bg-white/5 border border-[#d1cfc7] dark:border-white/5 animate-pulse" />
           </div>
         ) : bookings.length === 0 ? (
-          <div className="text-center py-20 border border-gray-200 dark:border-white/5 rounded-3xl bg-[#fbfbf9] dark:bg-[#111318]/25 space-y-4 shadow-sm">
+          <div className="text-center py-20 border border-[#d1cfc7] dark:border-white/5 rounded-3xl bg-[#f4f3ef] dark:bg-[#111318]/25 space-y-4 shadow-sm">
             <p className="text-gray-500 dark:text-gray-450 font-outfit text-base">You haven't initiated any booking logs yet.</p>
             <Link
               to="/"
@@ -78,7 +78,7 @@ export default function MyBookings() {
               return (
                 <article
                   key={booking._id}
-                  className="rounded-2xl border border-gray-250 dark:border-white/5 bg-[#fbfbf9] dark:bg-[#111318]/50 overflow-hidden flex flex-col md:flex-row shadow-lg hover:border-brand-500/10 transition-all duration-300 animate-fade-in"
+                  className="rounded-2xl border border-[#d1cfc7] dark:border-white/5 bg-[#f4f3ef] dark:bg-[#111318]/50 overflow-hidden flex flex-col md:flex-row shadow-lg hover:border-brand-500/10 transition-all duration-300 animate-fade-in"
                 >
                   
                   {/* Tour package thumbnail image */}
@@ -124,10 +124,10 @@ export default function MyBookings() {
                     </div>
 
                     {/* Bottom stats & CTAs */}
-                    <div className="border-t border-gray-200 dark:border-white/5 pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="border-t border-[#d1cfc7] dark:border-white/5 pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                       
                       <div className="text-center sm:text-left self-start sm:self-auto">
-                        <span className="text-[10px] text-gray-500 uppercase tracking-wider block">Deposit Paid</span>
+                        <span className="text-[10px] text-gray-550 uppercase tracking-wider block">Deposit Paid</span>
                         <span className="text-base font-outfit font-extrabold text-slate-900 dark:text-white">
                           ₹{booking.amountPaid?.toLocaleString("en-IN")}
                         </span>
@@ -138,7 +138,7 @@ export default function MyBookings() {
                         {/* Cancel Booking option */}
                         <button
                           onClick={() => handleCancelBooking(booking._id)}
-                          className="p-3 rounded-xl border border-gray-200 dark:border-white/5 hover:border-red-500/20 text-gray-400 hover:text-red-500 transition-colors"
+                          className="p-3 rounded-xl border border-[#d1cfc7] dark:border-white/5 hover:border-red-500/20 text-gray-400 hover:text-red-500 transition-colors"
                           title="Cancel Reservation"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -147,7 +147,7 @@ export default function MyBookings() {
                         {isPaid ? (
                           <Link
                             to={`/receipt/${booking._id}`}
-                            className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-white/10 hover:border-brand-500/30 text-xs font-outfit font-bold text-gray-750 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5"
+                            className="px-4 py-2.5 rounded-xl border border-[#d1cfc7] dark:border-white/10 hover:border-brand-500/30 text-xs font-outfit font-bold text-gray-750 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5"
                           >
                             <FileText className="w-4 h-4" />
                             <span>View Ticket</span>

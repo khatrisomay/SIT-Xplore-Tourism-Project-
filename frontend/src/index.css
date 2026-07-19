@@ -13,7 +13,7 @@
 
 /* Premium Glassmorphism styling */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(244, 243, 239, 0.7);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -27,7 +27,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .glass-panel-hover:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(244, 243, 239, 0.9);
   border-color: rgba(227, 138, 50, 0.2);
   box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.04);
   transform: translateY(-2px);
