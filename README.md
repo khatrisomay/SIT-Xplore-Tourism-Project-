@@ -29,12 +29,52 @@ SIT Xplore is a premium, full-stack tourism and travel booking platform designed
 - **Payments:** Razorpay API integration.
 - **Email/PDF Generation:** Nodemailer (SMTP), PDFKit.
 
-## 🚀 Live Deployment Architecture
+## 🚀 Live Deployment Architecture & DevOps
 
-The application is deployed using a decoupled architecture for maximum efficiency and cost-effectiveness:
-- **Frontend & Admin:** Hosted statically on Hostinger (`sitxplore.in` & `sitxplore.in/admin`).
-- **Backend API:** Hosted on Render.com (`sitxplore-api.onrender.com`).
-- **Database:** Hosted on MongoDB Atlas.
+The application uses a decoupled microservices-style architecture to ensure scalability, cost-effectiveness, and automated CI/CD pipelines.
+
+### DevOps Tools & CI/CD Pipeline
+- **Version Control:** GitHub
+- **Continuous Deployment (Backend):** Render CI/CD automatically triggers new builds and deploys upon pushes to the `main` branch.
+- **Frontend Hosting & DNS:** Hostinger (cPanel/hPanel) serving static React files over a global CDN.
+- **Database Management:** MongoDB Atlas Cloud Database.
+
+### Architecture Diagram
+
+```mermaid
+graph TD
+    subgraph Frontend Layer [Frontend Layer - Hostinger]
+        UI[Main Website UI<br/>React + Tailwind]
+        Admin[Admin Dashboard<br/>React + Recharts]
+    end
+
+    subgraph Backend Layer [Backend API - Render.com]
+        API[Express.js REST API]
+        Auth[JWT Authentication]
+        Mailer[Nodemailer & PDFKit]
+    end
+
+    subgraph Database Layer [Database - MongoDB Atlas]
+        DB[(MongoDB Cloud)]
+    end
+
+    subgraph External Services
+        Razorpay[Razorpay Payment Gateway]
+    end
+
+    subgraph DevOps & CI/CD
+        GitHub[GitHub Repositories]
+        RenderCI[Render Auto-Deploy]
+    end
+
+    %% Connections
+    UI -->|API Requests| API
+    Admin -->|Secure API Requests| API
+    API -->|Read/Write| DB
+    API -->|Process Payments| Razorpay
+    GitHub -->|Triggers Build| RenderCI
+    RenderCI -->|Deploys| API
+```
 
 ## 💻 Local Development Setup
 
