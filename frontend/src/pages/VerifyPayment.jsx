@@ -125,6 +125,28 @@ export default function VerifyPayment() {
     }
   };
 
+  const handleMockPayment = async () => {
+    setPaying(true);
+    setError("");
+    try {
+      const res = await axios.post("/api/bookings/confirm", {
+        bookingId: booking.bookingId,
+        transactionId: `txn_dev_bypass_${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+      });
+
+      if (res.data?.success) {
+        navigate(`/receipt/${res.data.booking._id}`);
+      } else {
+        setError(res.data?.message || "Mock payment confirmation failed.");
+      }
+    } catch (err) {
+      console.error("Payment confirmation error:", err);
+      setError("Network error confirming reservation payment.");
+    } finally {
+      setPaying(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col justify-between transition-colors duration-300">
       <Navbar />
@@ -196,8 +218,17 @@ export default function VerifyPayment() {
                 disabled={paying}
                 className="w-full py-4 bg-brand-500 hover:bg-brand-400 disabled:bg-brand-500/50 text-black text-sm font-outfit font-extrabold rounded-2xl shadow-xl shadow-brand-500/10 hover:shadow-brand-500/25 transition-all flex items-center justify-center gap-2"
               >
-                <span>{paying ? "Processing Payment..." : "Confirm & Pay Deposit"}</span>
+                <span>{paying ? "Processing Payment..." : "Pay with Razorpay"}</span>
                 {!paying && <ArrowRight className="w-4 h-4" />}
+              </button>
+
+              {/* Developer Bypass Button */}
+              <button
+                onClick={handleMockPayment}
+                disabled={paying}
+                className="w-full py-3 bg-gray-200 hover:bg-gray-300 dark:bg-white/5 dark:hover:bg-white/10 text-gray-800 dark:text-gray-300 text-xs font-medium rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                <span>Bypass Payment (Local Dev Mode)</span>
               </button>
 
             </div>
