@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { LayoutDashboard, Map, Compass, BookOpen, LogOut, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, Map, Compass, BookOpen, LogOut, ArrowLeft, MessageSquare } from "lucide-react";
 
 export default function AdminLayout({ children }) {
   const navigate = useNavigate();
@@ -79,6 +79,19 @@ export default function AdminLayout({ children }) {
               >
                 <BookOpen className="w-4 h-4" />
                 <span>Bookings Logs</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/queries"
+                className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
+                  isActive("/queries")
+                    ? "bg-brand-500 text-black font-bold"
+                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>Customer Queries</span>
               </Link>
             </li>
           </ul>

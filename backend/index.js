@@ -6,6 +6,7 @@ import { connectDB } from "./config/db.js";
 import userRouter from "./routes/userRouter.js";
 import packageRouter from "./routes/packageRouter.js";
 import bookingRouter from "./routes/bookingRouter.js";
+import contactRouter from "./routes/contactRouter.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ app.use("/uploads", express.static(uploadsDir));
 app.use("/api/auth", userRouter);
 app.use("/api/packages", packageRouter);
 app.use("/api/bookings", bookingRouter);
+app.use("/api/contacts", contactRouter);
 
 app.get("/", (req, res) => {
   res.send("SIT Xplore Tours API is running");

@@ -9,6 +9,7 @@ import PackageDetails from "./pages/PackageDetails";
 import VerifyPayment from "./pages/VerifyPayment";
 import Receipt from "./pages/Receipt";
 import MyBookings from "./pages/MyBookings";
+import Contact from "./pages/Contact";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="/verify-payment" element={<VerifyPayment />} />
             <Route path="/receipt/:id" element={<Receipt />} />
             <Route path="/my-bookings" element={<MyBookings />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
           <ToastContainer
             position="bottom-right"

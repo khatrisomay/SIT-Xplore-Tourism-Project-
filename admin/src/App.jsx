@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Destinations from "./pages/Destinations";
 import Bookings from "./pages/Bookings";
+import Queries from "./pages/Queries";
 
 // Basic Auth Gate guard wrapper
 const ProtectedRoute = ({ children }) => {
@@ -40,6 +41,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Bookings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/queries"
+          element={
+            <ProtectedRoute>
+              <Queries />
             </ProtectedRoute>
           }
         />

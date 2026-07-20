@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { ThemeContext } from "../context/ThemeContext";
-import { Menu, X, User, LogOut, Briefcase, Sun, Moon } from "lucide-react";
+import { Menu, X, User, LogOut, Briefcase, Sun, Moon, Instagram } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
@@ -69,15 +69,31 @@ export default function Navbar() {
               Vehicle Rentals
             </Link>
           </li>
+          <li>
+            <Link to="/contact" className={`hover:text-brand-600 dark:hover:text-brand-400 transition-colors ${isActive("/contact") ? "text-brand-500 font-bold" : ""}`}>
+              Contact
+            </Link>
+          </li>
         </ul>
 
         {/* Right side: Theme Toggle & User Actions */}
         <div className="hidden md:flex items-center gap-4">
           
+          {/* Instagram Button */}
+          <a
+            href="https://www.instagram.com/sit_xplore/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-full border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-650 dark:text-gray-300 hover:text-brand-650 dark:hover:text-brand-400 transition-all focus:outline-none"
+            title="Follow us on Instagram"
+          >
+            <Instagram className="w-4.5 h-4.5" />
+          </a>
+
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-600 dark:text-gray-300 transition-all focus:outline-none"
+            className="p-2 rounded-full border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-650 dark:text-gray-300 transition-all focus:outline-none"
             title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             {theme === "dark" ? <Sun className="w-4.5 h-4.5 text-brand-500" /> : <Moon className="w-4.5 h-4.5 text-brand-700" />}
@@ -121,6 +137,17 @@ export default function Navbar() {
         {/* Mobile controls (Hamburger + Theme Toggle) */}
         <div className="flex md:hidden items-center gap-2">
           
+          {/* Mobile Instagram link */}
+          <a
+            href="https://www.instagram.com/sit_xplore/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-lg border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 focus:outline-none"
+            title="Follow us on Instagram"
+          >
+            <Instagram className="w-5 h-5" />
+          </a>
+
           {/* Mobile Theme Toggle */}
           <button
             onClick={toggleTheme}
@@ -171,6 +198,11 @@ export default function Navbar() {
             <li>
               <Link to="/?cat=Vehicle Rental" onClick={() => setIsOpen(false)} className="block hover:text-brand-600 dark:hover:text-brand-400">
                 Vehicle Rentals
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" onClick={() => setIsOpen(false)} className="block hover:text-brand-600 dark:hover:text-brand-400">
+                Contact
               </Link>
             </li>
           </ul>
