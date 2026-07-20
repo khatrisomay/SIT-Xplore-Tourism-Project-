@@ -139,9 +139,10 @@ export default function Receipt() {
             background-color: white !important;
             background: white !important;
             color: #1e293b !important;
-            font-size: 12px !important;
+            font-size: 11.5px !important;
             margin: 0 !important;
             padding: 0 !important;
+            line-height: 1.5 !important;
           }
           main {
             padding: 0 !important;
@@ -177,7 +178,7 @@ export default function Receipt() {
           }
           /* Natural spacing between main invoice sections */
           .invoice-section {
-            margin-bottom: 24px !important;
+            margin-bottom: 16px !important;
             page-break-inside: avoid !important;
           }
           table {
@@ -185,8 +186,21 @@ export default function Receipt() {
             border-collapse: collapse !important;
           }
           table th, table td {
-            padding: 10px 14px !important;
+            padding: 8px 12px !important;
             border-bottom: 1px solid #e2e8f0 !important;
+          }
+          /* Compress padding specifically for print layouts to guarantee single page fit */
+          .p-8 {
+            padding: 16px !important;
+          }
+          .p-6 {
+            padding: 12px !important;
+          }
+          .p-5 {
+            padding: 10px 12px !important;
+          }
+          .gap-6 {
+            gap: 12px !important;
           }
         }
       `}</style>
@@ -221,12 +235,12 @@ export default function Receipt() {
         <article className="rounded-3xl bg-white text-slate-800 border border-gray-250 shadow-2xl relative overflow-hidden print:border-none print:shadow-none transition-colors duration-300">
           
           {/* Header Curved Banner */}
-          <div className="invoice-section relative bg-[#072113] text-white p-8 overflow-hidden flex flex-col md:flex-row justify-between items-center border-b-4 border-[#e0a816] rounded-t-3xl print-exact">
+          <div className="invoice-section relative bg-[#072113] text-white p-8 overflow-hidden flex flex-col sm:flex-row print:flex-row justify-between items-center border-b-4 border-[#e0a816] rounded-t-3xl print-exact">
             
             {/* Decorative yellow wave accent background */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#e0a816] rounded-bl-full opacity-5 pointer-events-none" />
 
-            <div className="flex flex-col md:flex-row items-center gap-4 relative z-10 text-center md:text-left">
+            <div className="flex flex-col sm:flex-row print:flex-row items-center gap-4 relative z-10 text-center sm:text-left print:text-left">
               <img
                 src="/sit xplore new logo.png"
                 alt="SIT Xplore Logo"
@@ -242,35 +256,35 @@ export default function Receipt() {
             </div>
 
             {/* Google review and served stats */}
-            <div className="mt-6 md:mt-0 text-[10px] font-outfit font-bold uppercase tracking-wider space-y-1.5 text-center md:text-right relative z-10 border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6">
-              <div className="flex items-center justify-center md:justify-end gap-1.5">
+            <div className="mt-6 sm:mt-0 print:mt-0 text-[10px] font-outfit font-bold uppercase tracking-wider space-y-1.5 text-center sm:text-right print:text-right relative z-10 border-t sm:border-t-0 print:border-t-0 sm:border-l print:border-l border-white/10 pt-4 sm:pt-0 print:pt-0 sm:pl-6 print:pl-6">
+              <div className="flex items-center justify-center sm:justify-end print:justify-end gap-1.5">
                 <span>🛡️</span> 50K+ TRIPS SERVED
               </div>
-              <div className="flex items-center justify-center md:justify-end gap-1.5">
+              <div className="flex items-center justify-center sm:justify-end print:justify-end gap-1.5">
                 <span>👥</span> 70,000+ HAPPY TRAVELERS
               </div>
-              <div className="flex items-center justify-center md:justify-end gap-1.5 text-[#e0a816]">
+              <div className="flex items-center justify-center sm:justify-end print:justify-end gap-1.5 text-[#e0a816]">
                 <span>★</span> 5★ GOOGLE REVIEWS
               </div>
             </div>
           </div>
 
           {/* Invoice Information Two-Column Header */}
-          <div className="invoice-section grid grid-cols-1 md:grid-cols-2 gap-6 p-8 border-b border-gray-150">
+          <div className="invoice-section grid grid-cols-1 sm:grid-cols-2 print:grid-cols-2 gap-6 p-8 border-b border-gray-150">
             <div className="space-y-1.5">
               <span className="text-[10px] text-gray-400 uppercase tracking-widest font-extrabold block">Booking Invoice</span>
               <h2 className="font-outfit font-extrabold text-2xl text-slate-800 uppercase tracking-tight">{booking.package?.title}</h2>
               <p className="text-xs text-gray-500 font-medium">Category: {booking.package?.category}</p>
             </div>
 
-            <div className="flex flex-col justify-between md:items-end">
+            <div className="flex flex-col justify-between sm:items-end print:items-end">
               <div className="flex items-center gap-3">
                 <span className="text-xs text-gray-500 font-medium">Invoice No:</span>
                 <span className="px-3 py-1 bg-[#072113] rounded text-[#e0a816] font-outfit font-extrabold text-xs tracking-wider print-exact">
                   SITX-{invoiceNumStr}
                 </span>
               </div>
-              <div className="space-y-1 text-xs text-slate-600 font-semibold mt-2 md:mt-0 md:text-right">
+              <div className="space-y-1 text-xs text-slate-600 font-semibold mt-2 sm:mt-0 print:mt-0 sm:text-right print:text-right">
                 <p>INVOICE DATE : <span className="text-slate-800 font-bold">{formattedDate}</span></p>
                 <p>BOOKING DATE : <span className="text-slate-800 font-bold">{formattedDate}</span></p>
               </div>
@@ -280,16 +294,16 @@ export default function Receipt() {
           {/* Customer Details */}
           <div className="invoice-section px-8 py-2">
             <h3 className="font-outfit font-extrabold text-xs uppercase tracking-wider text-slate-500 mb-3">Customer Details</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border border-gray-150 rounded-2xl p-6 bg-[#fcfbfa]">
+            <div className="grid grid-cols-1 sm:grid-cols-3 print:grid-cols-3 gap-6 border border-gray-150 rounded-2xl p-6 bg-[#fcfbfa]">
               <div className="space-y-1">
                 <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Lead Traveler</span>
                 <p className="text-sm font-bold text-slate-800 flex items-center gap-2">👤 {booking.customerName}</p>
               </div>
-              <div className="space-y-1 md:border-l border-gray-200 md:pl-6">
+              <div className="space-y-1 sm:border-l print:border-l border-gray-200 sm:pl-6 print:pl-6">
                 <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Email ID</span>
                 <p className="text-sm font-bold text-slate-800 flex items-center gap-2">✉ {booking.customerEmail}</p>
               </div>
-              <div className="space-y-1 md:border-l border-gray-200 md:pl-6">
+              <div className="space-y-1 sm:border-l print:border-l border-gray-200 sm:pl-6 print:pl-6">
                 <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Mobile Number</span>
                 <p className="text-sm font-bold text-slate-800 flex items-center gap-2">📞 {booking.customerPhone}</p>
               </div>
@@ -334,7 +348,7 @@ export default function Receipt() {
           {/* Payment Summary Cards */}
           <div className="invoice-section px-8 py-2">
             <h3 className="font-outfit font-extrabold text-xs uppercase tracking-wider text-slate-500 mb-3">Payment Summary</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 print:grid-cols-3 gap-6 mb-4">
               <div className="border border-gray-150 rounded-2xl p-5 bg-white shadow-sm flex flex-col justify-between">
                 <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Total Cost</span>
                 <span className="text-2xl font-outfit font-extrabold text-slate-800 mt-2">₹ {booking.totalCost?.toLocaleString("en-IN")}</span>
@@ -349,7 +363,7 @@ export default function Receipt() {
               </div>
             </div>
             
-            <div className="bg-[#072113] text-white rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816] print-exact">
+            <div className="bg-[#072113] text-white rounded-2xl p-5 flex flex-col sm:flex-row print:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816] print-exact">
               <div>
                 <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block">Paid Advance (In Words)</span>
                 <span className="text-sm font-semibold text-white mt-1 block">{numberToWords(booking.amountPaid)}</span>
@@ -372,12 +386,12 @@ export default function Receipt() {
           </div>
 
           {/* Footer strip */}
-          <div className="bg-[#072113] text-white p-6 rounded-b-3xl flex flex-col md:flex-row justify-between items-center gap-4 border-t-2 border-[#e0a816]/20 print-exact">
-            <div className="space-y-1 text-center md:text-left">
+          <div className="bg-[#072113] text-white p-6 rounded-b-3xl flex flex-col sm:flex-row print:flex-row justify-between items-center gap-4 border-t-2 border-[#e0a816]/20 print-exact">
+            <div className="space-y-1 text-center sm:text-left print:text-left">
               <p className="text-[11px] font-bold uppercase tracking-wider text-white">SIT Xplore Support</p>
               <p className="text-[10px] text-gray-400 font-medium">📞 +91-9050553507, 7027878371 | ✉ booking@sitxplore.in | 🌐 www.sitxplore.in</p>
             </div>
-            <div className="flex flex-col items-center md:items-end gap-1 font-outfit text-xs">
+            <div className="flex flex-col items-center sm:items-end print:items-end gap-1 font-outfit text-xs">
               <p className="italic font-bold text-white text-sm">Thank You for Booking!</p>
               <p className="text-[9px] text-[#e0a816] tracking-widest uppercase font-extrabold">Explore More, Worry Less</p>
             </div>
