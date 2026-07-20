@@ -134,17 +134,17 @@ export default function Receipt() {
       <style>{`
         @page {
           size: A4 portrait;
-          margin: 15mm 15mm 15mm 15mm;
+          margin: 12mm 15mm 12mm 15mm;
         }
         @media print {
           body, html, #root {
             background-color: white !important;
             background: white !important;
             color: #1e293b !important;
-            font-size: 11.5px !important;
+            font-size: 11px !important;
             margin: 0 !important;
             padding: 0 !important;
-            line-height: 1.5 !important;
+            line-height: 1.4 !important;
           }
           main {
             padding: 0 !important;
@@ -180,7 +180,7 @@ export default function Receipt() {
           }
           /* Natural spacing between main invoice sections */
           .invoice-section {
-            margin-bottom: 16px !important;
+            margin-bottom: 12px !important;
             page-break-inside: avoid !important;
           }
           table {
@@ -188,21 +188,21 @@ export default function Receipt() {
             border-collapse: collapse !important;
           }
           table th, table td {
-            padding: 8px 12px !important;
+            padding: 6px 12px !important;
             border-bottom: 1px solid #e2e8f0 !important;
           }
           /* Compress padding specifically for print layouts to guarantee single page fit */
           .p-8 {
-            padding: 16px !important;
-          }
-          .p-6 {
             padding: 12px !important;
           }
+          .p-6 {
+            padding: 8px 12px !important;
+          }
           .p-5 {
-            padding: 10px 12px !important;
+            padding: 8px 10px !important;
           }
           .gap-6 {
-            gap: 12px !important;
+            gap: 10px !important;
           }
         }
       `}</style>
