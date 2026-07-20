@@ -20,6 +20,8 @@ const bookingSchema = new mongoose.Schema(
     transactionId: { type: String, default: "" },
     amountPaid: { type: Number, required: true }, // calculated deposit paid
     totalCost: { type: Number, required: true }, // total cost calculated
+    couponCode: { type: String, default: "" },
+    discount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
