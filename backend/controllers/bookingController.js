@@ -44,12 +44,12 @@ export const createBooking = async (req, res) => {
     // Process coupon code
     let discount = 0;
     const coupons = {
-      "SITX500_SLCT_A8F9": 500,
-      "SITX500_SLCT_G7H3": 500,
-      "SITX500_SLCT_V2W9": 500,
-      "SITX1000_SLCT_B2C7": 1000,
-      "SITX1000_SLCT_X3Y8": 1000,
-      "SITX1000_SLCT_Z4W9": 1000
+      "SX9K7P4M2Q": 500,
+      "TR8N5XQ2L7": 500,
+      "XP4V9M7K3R": 500,
+      "SK2Z8Q7M5X": 1000,
+      "TR9L4X8Q6N": 1000,
+      "XP7M2K9R4V": 1000
     };
     if (couponCode) {
       const code = couponCode.toUpperCase().trim();
