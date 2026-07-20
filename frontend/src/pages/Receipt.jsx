@@ -135,11 +135,23 @@ export default function Receipt() {
             background-color: white !important;
             background: white !important;
             color: black !important;
+            margin: 0 !important;
+            padding: 0 !important;
           }
           .print-exact {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
             color-adjust: exact !important;
+          }
+          /* Scale container slightly down for standard A4 paper height to fit on a single sheet */
+          article {
+            transform: scale(0.92);
+            transform-origin: top center;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            page-break-inside: avoid !important;
+            border: none !important;
+            box-shadow: none !important;
           }
         }
       `}</style>
@@ -174,7 +186,7 @@ export default function Receipt() {
         <article className="rounded-3xl bg-white text-slate-800 border border-gray-250 shadow-2xl relative overflow-hidden print:border-none print:shadow-none transition-colors duration-300">
           
           {/* Header Curved Banner */}
-          <div className="relative bg-[#072113] text-white p-6 pb-8 overflow-hidden flex flex-col sm:flex-row justify-between items-center border-b-4 border-[#e0a816] print-exact">
+          <div className="relative bg-[#072113] text-white p-6 pb-8 print:py-4 print:px-6 overflow-hidden flex flex-col sm:flex-row justify-between items-center border-b-4 border-[#e0a816] print-exact">
             
             {/* Decorative yellow wave accent background */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#e0a816] rounded-bl-full opacity-10 pointer-events-none" />
@@ -208,7 +220,7 @@ export default function Receipt() {
           </div>
 
           {/* Company Details & Invoice Metadata */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 border-b border-gray-150">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 print:py-3 print:px-6 print:gap-3 border-b border-gray-150">
             {/* Company Info */}
             <div className="space-y-1 text-xs text-slate-600">
               <h3 className="font-outfit font-extrabold text-sm text-[#072113]">SIT XPLORE</h3>
@@ -222,14 +234,14 @@ export default function Receipt() {
             </div>
 
             {/* Invoice Info */}
-            <div className="space-y-4 md:pl-6 md:border-l border-gray-150 flex flex-col justify-between">
+            <div className="space-y-4 md:pl-6 md:border-l border-gray-150 flex flex-col justify-between print:space-y-2">
               <div className="flex justify-between items-center">
                 <h2 className="text-3xl font-outfit font-extrabold text-slate-800 tracking-wider">INVOICE</h2>
                 <div className="px-4 py-1.5 bg-[#072113] rounded text-[#e0a816] font-outfit font-extrabold text-sm shadow print-exact">
                   INVOICE NO. : {invoiceNumStr}
                 </div>
               </div>
-              <div className="space-y-1.5 text-xs text-slate-600 font-medium">
+              <div className="space-y-1.5 text-xs text-slate-600 font-medium print:space-y-1">
                 <p className="flex justify-between border-b border-gray-100 pb-1">
                   <span className="text-gray-400">INVOICE DATE :</span> 
                   <strong className="text-slate-800">{formattedDate}</strong>
@@ -243,23 +255,23 @@ export default function Receipt() {
           </div>
 
           {/* Customer Details */}
-          <div className="px-6 py-4 space-y-3">
+          <div className="px-6 py-4 print:py-2.5 print:px-6 space-y-3 print:space-y-1.5">
             <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816] print-exact">
               Customer Details
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 rounded-2xl p-4 bg-[#fcfbfa]">
-              <div className="space-y-2 text-xs text-slate-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 rounded-2xl p-4 print:p-3 bg-[#fcfbfa]">
+              <div className="space-y-2 text-xs text-slate-700 print:space-y-1">
                 <p className="flex items-center gap-2"><User className="w-3.5 h-3.5 text-gray-400" /> <span><strong>NAME:</strong> {booking.customerName}</span></p>
                 <p className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-gray-400" /> <span><strong>EMAIL ID:</strong> {booking.customerEmail}</span></p>
               </div>
-              <div className="space-y-2 text-xs text-slate-700 md:border-l border-gray-200 md:pl-4">
+              <div className="space-y-2 text-xs text-slate-700 md:border-l border-gray-200 md:pl-4 print:space-y-1">
                 <p className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-gray-400" /> <span><strong>MOBILE NO:</strong> {booking.customerPhone}</span></p>
               </div>
             </div>
           </div>
 
           {/* Travel Details */}
-          <div className="px-6 py-4 space-y-3">
+          <div className="px-6 py-4 print:py-2.5 print:px-6 space-y-3 print:space-y-1.5">
             <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816] print-exact">
               Travel Details
             </div>
@@ -267,43 +279,43 @@ export default function Receipt() {
               <table className="w-full text-left text-xs border-collapse">
                 <tbody className="divide-y divide-gray-150 text-slate-700">
                   <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 font-bold w-1/3 flex items-center gap-2 text-gray-500"><Calendar className="w-3.5 h-3.5" /> TRAVEL DATE</td>
-                    <td className="p-3 w-6 text-center">:</td>
-                    <td className="p-3 font-medium text-slate-800">{booking.travelDate}</td>
+                    <td className="p-3 print:p-2 font-bold w-1/3 flex items-center gap-2 text-gray-500"><Calendar className="w-3.5 h-3.5" /> TRAVEL DATE</td>
+                    <td className="p-3 print:p-2 w-6 text-center">:</td>
+                    <td className="p-3 print:p-2 font-medium text-slate-800">{booking.travelDate}</td>
                   </tr>
                   <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><User className="w-3.5 h-3.5" /> TRAVEL TYPE</td>
-                    <td className="p-3 text-center">:</td>
-                    <td className="p-3 font-medium text-slate-800">
+                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><User className="w-3.5 h-3.5" /> TRAVEL TYPE</td>
+                    <td className="p-3 print:p-2 text-center">:</td>
+                    <td className="p-3 print:p-2 font-medium text-slate-800">
                       {booking.totalTravelers === 1 ? "Solo Travel (1 Pax)" : `Group Travel (${booking.totalTravelers} Pax)`}
                     </td>
                   </tr>
                   <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><BedSingle className="w-3.5 h-3.5" /> ROOM SHARING</td>
-                    <td className="p-3 text-center">:</td>
-                    <td className="p-3 font-medium text-slate-800 capitalize">
+                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><BedSingle className="w-3.5 h-3.5" /> ROOM SHARING</td>
+                    <td className="p-3 print:p-2 text-center">:</td>
+                    <td className="p-3 print:p-2 font-medium text-slate-800 capitalize">
                       {booking.sharingSelected?.replace("Sharing", " Sharing")}
                     </td>
                   </tr>
                   <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><MapPin className="w-3.5 h-3.5" /> ROUTE</td>
-                    <td className="p-3 text-center">:</td>
-                    <td className="p-3 font-medium text-slate-800">{booking.package?.title}</td>
+                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><MapPin className="w-3.5 h-3.5" /> ROUTE</td>
+                    <td className="p-3 print:p-2 text-center">:</td>
+                    <td className="p-3 print:p-2 font-medium text-slate-800">{booking.package?.title}</td>
                   </tr>
                   <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><CreditCard className="w-3.5 h-3.5" /> TOTAL PACKAGE RATE</td>
-                    <td className="p-3 text-center">:</td>
-                    <td className="p-3 font-extrabold text-slate-950 text-sm">₹ {booking.totalCost?.toLocaleString("en-IN")}</td>
+                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><CreditCard className="w-3.5 h-3.5" /> TOTAL PACKAGE RATE</td>
+                    <td className="p-3 print:p-2 text-center">:</td>
+                    <td className="p-3 print:p-2 font-extrabold text-slate-950 text-sm">₹ {booking.totalCost?.toLocaleString("en-IN")}</td>
                   </tr>
                   <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><Check className="w-3.5 h-3.5 text-green-600" /> PAID ADVANCE</td>
-                    <td className="p-3 text-center">:</td>
-                    <td className="p-3 font-extrabold text-green-600 text-sm">₹ {booking.amountPaid?.toLocaleString("en-IN")}</td>
+                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><Check className="w-3.5 h-3.5 text-green-600" /> PAID ADVANCE</td>
+                    <td className="p-3 print:p-2 text-center">:</td>
+                    <td className="p-3 print:p-2 font-extrabold text-green-600 text-sm">₹ {booking.amountPaid?.toLocaleString("en-IN")}</td>
                   </tr>
                   <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><FileText className="w-3.5 h-3.5 text-red-500" /> LEFT AMOUNT</td>
-                    <td className="p-3 text-center">:</td>
-                    <td className="p-3 font-extrabold text-red-600 text-sm">₹ {remainingBalance?.toLocaleString("en-IN")}</td>
+                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><FileText className="w-3.5 h-3.5 text-red-500" /> LEFT AMOUNT</td>
+                    <td className="p-3 print:p-2 text-center">:</td>
+                    <td className="p-3 print:p-2 font-extrabold text-red-600 text-sm">₹ {remainingBalance?.toLocaleString("en-IN")}</td>
                   </tr>
                 </tbody>
               </table>
@@ -311,7 +323,7 @@ export default function Receipt() {
           </div>
 
           {/* Pricing calculations Block */}
-          <div className="mx-6 my-4 bg-[#072113] text-white rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816] print-exact">
+          <div className="mx-6 my-4 print:my-2 bg-[#072113] text-white rounded-2xl p-5 print:py-3 print:px-6 flex flex-col sm:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816] print-exact">
             <div>
               <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block">TOTAL PAID (ADVANCE)</span>
               <span className="text-3xl font-outfit font-extrabold text-[#e0a816]">₹ {booking.amountPaid?.toLocaleString("en-IN")}</span>
@@ -328,7 +340,7 @@ export default function Receipt() {
           </div>
 
           {/* Payment Terms and Signatures */}
-          <div className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-6 items-center border-t border-gray-100">
+          <div className="p-6 print:py-3 print:px-6 grid grid-cols-1 sm:grid-cols-3 gap-6 items-center border-t border-gray-100">
             {/* Payment Status Check */}
             <div className="space-y-1">
               <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">PAYMENT STATUS</span>
@@ -351,7 +363,7 @@ export default function Receipt() {
           </div>
 
           {/* Footer banner strip */}
-          <div className="bg-[#072113] text-white p-4 rounded-b-3xl flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] font-outfit font-semibold tracking-wider uppercase border-t-2 border-[#e0a816]/20 print-exact">
+          <div className="bg-[#072113] text-white p-4 print:py-2.5 print:px-6 rounded-b-3xl flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] font-outfit font-semibold tracking-wider uppercase border-t-2 border-[#e0a816]/20 print-exact">
             <div className="flex items-center gap-2">
               <Shield className="w-3.5 h-3.5 text-[#e0a816]" />
               <span><strong>24x7 TRAVEL SUPPORT</strong> | TRUSTED • SAFE • MEMORABLE</span>
