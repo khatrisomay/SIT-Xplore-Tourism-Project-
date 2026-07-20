@@ -52,12 +52,18 @@ export default function Home() {
 
   const categories = ["All", "Domestic Trips", "International Trips", "Weekend Getaways", "Hotel Booking", "Vehicle Rental"];
 
-  const filteredPackages = packages.filter((pkg) => {
-    const matchesCategory = activeCategory === "All" || pkg.category === activeCategory;
-    const matchesSearch = pkg.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          pkg.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredPackages = packages
+    .filter((pkg) => {
+      const matchesCategory = activeCategory === "All" || pkg.category === activeCategory;
+      const matchesSearch = pkg.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            pkg.category.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    })
+    .sort((a, b) => {
+      const priceA = a.sharingPrices?.quadSharing || a.sharingPrices?.doubleSharing || 0;
+      const priceB = b.sharingPrices?.quadSharing || b.sharingPrices?.doubleSharing || 0;
+      return priceA - priceB;
+    });
 
   return (
     <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300">

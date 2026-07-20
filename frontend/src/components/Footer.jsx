@@ -20,6 +20,9 @@ export default function Footer() {
           <p className="text-xs text-gray-500">
             © {new Date().getFullYear()} SIT Xplore. All rights reserved.
           </p>
+          <p className="text-xs text-brand-500 font-outfit font-semibold tracking-wider">
+            Designed & Developed by Somay Khatri
+          </p>
         </div>
 
         {/* Links */}

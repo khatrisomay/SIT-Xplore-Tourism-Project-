@@ -27,6 +27,12 @@ export const connectDB = async () => {
       console.log("Auto-seeded admin user: admin@sitxplore.com / admin123");
     }
 
+    // Ensure existing Thailand package uses the local brochure image
+    await Package.updateOne(
+      { title: "Thailand (Phuket + Krabi) Paradise Tour" },
+      { $set: { bannerImage: "/thailand-bg.jpg" } }
+    );
+
     // Auto-seed packages matching www.sitxplore.in plus hotel/bike rentals
     const packageCount = await Package.countDocuments({});
     
@@ -316,7 +322,7 @@ export const connectDB = async () => {
           category: "International Trips",
           duration: "5N/6D",
           description: "Explore the tropical paradise of Thailand with our Phuket and Krabi twin-destination tour. Settle in premium hotels, relax on white sand beaches, ride speedboats across iconic limestone islands, and enjoy seamless airport transfers.",
-          bannerImage: "https://images.unsplash.com/photo-1528181304800-2f1908c39522?q=80&w=1200&auto=format&fit=crop",
+          bannerImage: "/thailand-bg.jpg",
           galleryImages: [],
           sharingPrices: {
             doubleSharing: 29000,
