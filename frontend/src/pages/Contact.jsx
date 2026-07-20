@@ -144,7 +144,7 @@ export default function Contact() {
                   <div>
                     <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold block">Base Location</span>
                     <span className="text-xs font-semibold text-slate-800 dark:text-white leading-relaxed block">
-                      near Maharaja agrasen dharamshala, Pocket 4, Sector 16G, Rohini, Delhi, 110089
+                      Near Maharaja Agrasen Dharamshala, Pocket 4, Sector 16G, Rohini, Delhi, 110089
                     </span>
                   </div>
                 </div>
