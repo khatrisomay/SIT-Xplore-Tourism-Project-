@@ -128,12 +128,12 @@ export default function PackageDetails() {
     setCouponError("");
     const code = couponCode.toUpperCase().trim();
     const coupons = {
-      "SITX500": 500,
-      "TRIP500": 500,
-      "XPLORE500": 500,
-      "SITX1000": 1000,
-      "TRIP1000": 1000,
-      "XPLORE1000": 1000
+      "SITX500_SLCT_A8F9": 500,
+      "SITX500_SLCT_G7H3": 500,
+      "SITX500_SLCT_V2W9": 500,
+      "SITX1000_SLCT_B2C7": 1000,
+      "SITX1000_SLCT_X3Y8": 1000,
+      "SITX1000_SLCT_Z4W9": 1000
     };
     if (!code) {
       setCouponError("Please enter a coupon code.");

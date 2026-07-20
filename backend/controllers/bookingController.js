@@ -14,6 +14,7 @@ export const createBooking = async (req, res) => {
       sharingSelected,
       totalTravelers,
       travelersList,
+      couponCode,
     } = req.body;
 
     if (!packageId || !customerName || !customerEmail || !customerPhone || !travelDate || !sharingSelected || !totalTravelers) {
@@ -39,7 +40,27 @@ export const createBooking = async (req, res) => {
 
     const baseCost = pricePerPerson * Number(totalTravelers);
     const gstAmount = Math.round(baseCost * 0.05);
-    const totalCost = baseCost + gstAmount;
+
+    // Process coupon code
+    let discount = 0;
+    const coupons = {
+      "SITX500_SLCT_A8F9": 500,
+      "SITX500_SLCT_G7H3": 500,
+      "SITX500_SLCT_V2W9": 500,
+      "SITX1000_SLCT_B2C7": 1000,
+      "SITX1000_SLCT_X3Y8": 1000,
+      "SITX1000_SLCT_Z4W9": 1000
+    };
+    if (couponCode) {
+      const code = couponCode.toUpperCase().trim();
+      if (coupons[code]) {
+        discount = coupons[code];
+      } else {
+        return res.status(400).json({ success: false, message: "Invalid coupon code." });
+      }
+    }
+
+    const totalCost = Math.max(0, baseCost + gstAmount - discount);
     // Booking deposit from package (e.g. 3000) multiplied by travelers count
     const amountPaid = pkg.bookingDeposit * Number(totalTravelers);
 
@@ -59,6 +80,8 @@ export const createBooking = async (req, res) => {
       paymentStatus: "pending", // starts pending, transitions to paid during checkout validation
       amountPaid,
       totalCost,
+      couponCode: couponCode ? couponCode.toUpperCase().trim() : "",
+      discount,
     });
 
     return res.status(201).json({
