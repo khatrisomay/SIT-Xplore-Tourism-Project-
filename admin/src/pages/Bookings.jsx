@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AdminLayout from "../components/AdminLayout";
-import { Search, Calendar, Users, Eye, Trash2, ArrowRight } from "lucide-react";
+import { Search, Calendar, Users, Eye, Trash2, ArrowRight, X } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -210,7 +210,17 @@ export default function Bookings() {
               {/* Transaction breakdown sheet */}
               <div className="border border-white/5 rounded-2xl p-4 bg-[#111318]/50 space-y-2.5 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-gray-500 font-bold">Total Booking Cost:</span>
+                  <span className="text-gray-500 font-bold">Base + GST Total:</span>
+                  <span className="font-bold text-white">₹{(selectedBooking.totalCost + (selectedBooking.discount || 0))?.toLocaleString("en-IN")}</span>
+                </div>
+                {selectedBooking.couponCode && (
+                  <div className="flex justify-between">
+                    <span className="text-brand-400 font-bold">Coupon Applied ({selectedBooking.couponCode}):</span>
+                    <span className="font-bold text-brand-400">-₹{selectedBooking.discount?.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
+                <div className="flex justify-between">
+                  <span className="text-gray-500 font-bold">Final Booking Cost:</span>
                   <span className="font-bold text-white">₹{selectedBooking.totalCost?.toLocaleString("en-IN")}</span>
                 </div>
                 <div className="flex justify-between">
@@ -219,7 +229,7 @@ export default function Bookings() {
                 </div>
                 <div className="flex justify-between border-t border-white/5 pt-2 text-sm font-semibold">
                   <span className="text-brand-400">Remaining Balance:</span>
-                  <span className="font-outfit font-extrabold text-white">₹{(selectedBooking.totalCost - selectedBooking.amountPaid)?.toLocaleString("en-IN")}</span>
+                  <span className="font-outfit font-extrabold text-white">₹{Math.max(0, selectedBooking.totalCost - selectedBooking.amountPaid)?.toLocaleString("en-IN")}</span>
                 </div>
                 <div className="flex justify-between text-[10px] text-gray-500 border-t border-white/5 pt-2">
                   <span>Transaction ID:</span>
