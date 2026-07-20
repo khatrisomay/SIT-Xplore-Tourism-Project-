@@ -45,7 +45,7 @@ export default function Login() {
       }
     } catch (err) {
       console.error("Admin login error:", err);
-      setError(err.response?.data?.message || "Invalid credentials. Try seeding using: admin@sitxplore.com / admin123");
+      setError(err.response?.data?.message || "Invalid credentials. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -84,7 +84,7 @@ export default function Login() {
               <input
                 type="email"
                 required
-                placeholder="admin@sitxplore.com"
+                placeholder="admin@yourdomain.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-transparent border-none outline-none text-sm text-white w-full placeholder-gray-600"
@@ -117,12 +117,6 @@ export default function Login() {
           </button>
 
         </form>
-
-        <div className="bg-white/5 border border-white/5 p-4 rounded-2xl text-[10px] text-gray-400 text-center leading-normal">
-          Default seed credentials:<br />
-          Email: <strong className="text-white">admin@sitxplore.com</strong><br />
-          Password: <strong className="text-white">admin123</strong>
-        </div>
 
       </div>
     </div>

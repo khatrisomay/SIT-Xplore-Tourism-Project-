@@ -120,7 +120,7 @@ export const seedAdmin = async (req, res) => {
     }
 
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash("admin123", salt);
+    const hashedPassword = await bcrypt.hash("SitXplore!Admin2026$", salt);
 
     const admin = await User.create({
       name: "SIT Xplore Admin",
@@ -132,7 +132,7 @@ export const seedAdmin = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Admin seeded successfully. Login: admin@sitxplore.com / admin123",
+      message: "Admin seeded successfully. Login: admin@sitxplore.com",
       email: admin.email,
     });
   } catch (error) {

@@ -16,15 +16,15 @@ export const connectDB = async () => {
     const adminCount = await User.countDocuments({ role: "admin" });
     if (adminCount === 0) {
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash("admin123", salt);
+      const hashedPassword = await bcrypt.hash("SitXplore!Admin2026$", salt);
       await User.create({
-        name: "SIT Xplore Admin",
+        name: "Admin User",
         email: "admin@sitxplore.com",
         password: hashedPassword,
         phone: "+91-9050553507",
         role: "admin",
       });
-      console.log("Auto-seeded admin user: admin@sitxplore.com / admin123");
+      console.log("Auto-seeded admin user: admin@sitxplore.com");
     }
 
     // Ensure existing Thailand package uses the local brochure image
