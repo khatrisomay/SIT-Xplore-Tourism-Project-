@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sitxplore-api
+  labels:
+    app: sitxplore
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sitxplore
+  template:
+    metadata:
+      labels:
+        app: sitxplore
+    spec:
+      containers:
+      - name: backend
+        image: sitxplore-backend:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: NODE_ENV
+          value: "production"
+        # Environment variables will be injected via ConfigMap/Secrets
