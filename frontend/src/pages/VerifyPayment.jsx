@@ -80,7 +80,6 @@ export default function VerifyPayment() {
         currency: "INR",
         name: "SIT Xplore",
         description: "Booking Deposit for " + booking.package.title,
-        image: "/sit xplore new logo.png",
         order_id: orderData.order.id,
         handler: async function (response) {
           try {
