@@ -150,13 +150,13 @@ export default function Receipt() {
           }
           /* Visual scale transform */
           article {
-            transform: scale(0.92);
-            transform-origin: top center;
             margin: 0 auto !important;
             padding: 0 !important;
             border: none !important;
             box-shadow: none !important;
             page-break-inside: avoid !important;
+            width: 100% !important;
+            max-width: 100% !important;
           }
           /* Compress layout boxes for printing */
           .print-exact {
