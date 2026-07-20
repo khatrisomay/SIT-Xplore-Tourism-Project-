@@ -137,6 +137,7 @@ export default function Receipt() {
             color: black !important;
             margin: 0 !important;
             padding: 0 !important;
+            font-size: 11px !important;
           }
           main {
             padding: 0 !important;
@@ -145,21 +146,64 @@ export default function Receipt() {
           main > * {
             margin-top: 0 !important;
             margin-bottom: 0 !important;
+            padding: 0 !important;
           }
+          /* Visual scale transform */
+          article {
+            transform: scale(0.92);
+            transform-origin: top center;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            page-break-inside: avoid !important;
+          }
+          /* Compress layout boxes for printing */
           .print-exact {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
             color-adjust: exact !important;
           }
-          /* Scale container slightly down for standard A4 paper height to fit on a single sheet */
-          article {
-            transform: scale(0.85);
-            transform-origin: top center;
-            margin: 0 auto !important;
-            padding: 0 !important;
-            page-break-inside: avoid !important;
-            border: none !important;
-            box-shadow: none !important;
+          /* Direct layout padding & margin compression */
+          table td {
+            padding: 4px 8px !important;
+          }
+          .p-6, .py-6, .px-6 {
+            padding: 8px 12px !important;
+          }
+          .py-4, .px-4 {
+            padding: 4px 12px !important;
+          }
+          .p-5 {
+            padding: 8px 12px !important;
+          }
+          .my-4, .my-3, .my-2 {
+            margin-top: 4px !important;
+            margin-bottom: 4px !important;
+          }
+          .mx-6 {
+            margin-left: 12px !important;
+            margin-right: 12px !important;
+          }
+          .gap-6 {
+            gap: 8px !important;
+          }
+          .space-y-3 > * + * {
+            margin-top: 4px !important;
+          }
+          .space-y-4 > * + * {
+            margin-top: 6px !important;
+          }
+          h2 {
+            font-size: 1.5rem !important;
+            line-height: 2rem !important;
+          }
+          .text-3xl {
+            font-size: 1.5rem !important;
+          }
+          img.w-14 {
+            width: 2.5rem !important;
+            height: 2.5rem !important;
           }
         }
       `}</style>
