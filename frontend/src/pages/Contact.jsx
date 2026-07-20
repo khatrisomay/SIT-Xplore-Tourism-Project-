@@ -24,6 +24,19 @@ export default function Contact() {
       const res = await axios.post("/api/contacts", { name, email, phone, message });
       if (res.data?.success) {
         toast.success(res.data.message || "Message submitted successfully!");
+
+        // Construct pre-filled WhatsApp link
+        const whatsappMsg = `*SIT Xplore Customer Query*\n\n` +
+          `• *Name:* ${name}\n` +
+          `• *Email:* ${email}\n` +
+          `• *Phone:* ${phone}\n\n` +
+          `*Message:*\n${message}`;
+        const encodedMsg = encodeURIComponent(whatsappMsg);
+        const whatsappUrl = `https://wa.me/919050553507?text=${encodedMsg}`;
+
+        // Open WhatsApp chat in a new tab
+        window.open(whatsappUrl, "_blank");
+
         setName("");
         setEmail("");
         setPhone("");
