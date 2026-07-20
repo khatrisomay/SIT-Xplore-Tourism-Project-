@@ -49,7 +49,7 @@ const generateInvoicePDFBuffer = (booking) => {
     doc.font("Helvetica")
        .fontSize(8)
        .fillColor("#9ca3af")
-       .text("Sonipat, Haryana | booking@sitxplore.in | www.sitxplore.in", 40, 68);
+       .text("Delhi, India | booking@sitxplore.in | www.sitxplore.in", 40, 68);
 
     // Google review/stats inside header
     doc.fillColor("#ffffff")
@@ -117,8 +117,9 @@ const generateInvoicePDFBuffer = (booking) => {
     drawRow("Number of Travelers", `${booking.totalTravelers} Head(s) ${booking.travelersList?.length > 0 ? `(${booking.travelersList.join(", ")})` : ""}`, 350);
 
     // Pricing breakdowns
-    const baseCost = Math.round(booking.totalCost / 1.05);
-    const gstAmount = booking.totalCost - baseCost;
+    const discountAmount = booking.discount || 0;
+    const baseCost = Math.round((booking.totalCost + discountAmount) / 1.05);
+    const gstAmount = Math.round(baseCost * 0.05);
     const remainingBalance = booking.totalCost - booking.amountPaid;
 
     doc.fillColor(textColor)
@@ -126,22 +127,25 @@ const generateInvoicePDFBuffer = (booking) => {
        .fontSize(9)
        .text("PAYMENT SUMMARY", 40, 395);
 
-    const drawSummaryBox = (title, amount, x, color = textColor) => {
-      doc.rect(x, 410, 160, 50).fill("#ffffff").stroke("#e2e8f0");
-      doc.fillColor("#64748b").font("Helvetica-Bold").fontSize(7).text(title.toUpperCase(), x + 10, 420);
-      doc.fillColor(color).font("Helvetica-Bold").fontSize(12).text(`INR ${amount.toLocaleString("en-IN")}`, x + 10, 435);
+    const drawSummaryBox = (title, amount, x, y, color = textColor) => {
+      doc.rect(x, y, 160, 42).fill("#ffffff").stroke("#e2e8f0");
+      doc.fillColor("#64748b").font("Helvetica-Bold").fontSize(6.5).text(title.toUpperCase(), x + 10, y + 10);
+      doc.fillColor(color).font("Helvetica-Bold").fontSize(10).text(`INR ${amount.toLocaleString("en-IN")}`, x + 10, y + 24);
     };
 
-    drawSummaryBox("Base Package Cost", baseCost, 40);
-    drawSummaryBox("GST (5%) Surcharge", gstAmount, 213);
-    drawSummaryBox("Total Cost (incl. GST)", booking.totalCost, 386);
+    // Row 1 of payment summary boxes
+    drawSummaryBox("Base Package Cost", baseCost, 40, 410);
+    drawSummaryBox("GST (5%) Surcharge", gstAmount, 213, 410);
+    drawSummaryBox("Coupon Discount", discountAmount, 386, 410, discountAmount > 0 ? "#16a34a" : textColor);
 
-    drawSummaryBox("Advance Paid", booking.amountPaid, 40, "#16a34a");
-    drawSummaryBox("Remaining Balance", remainingBalance, 213, "#dc2626");
+    // Row 2 of payment summary boxes
+    drawSummaryBox("Total Cost (incl. GST)", booking.totalCost, 40, 460);
+    drawSummaryBox("Advance Paid", booking.amountPaid, 213, 460, "#16a34a");
+    drawSummaryBox("Remaining Balance", remainingBalance, 386, 460, "#dc2626");
 
     // Amount in words box
-    doc.rect(386, 480, 160, 50).fill(primaryColor);
-    doc.fillColor("#d1d5db").font("Helvetica-Bold").fontSize(6.5).text("ADVANCE PAID (IN WORDS)", 396, 490);
+    doc.rect(386, 512, 160, 40).fill(primaryColor);
+    doc.fillColor("#d1d5db").font("Helvetica-Bold").fontSize(6).text("ADVANCE PAID (IN WORDS)", 396, 520);
     
     // Words logic helper
     const numberToWords = (num) => {
@@ -169,16 +173,16 @@ const generateInvoicePDFBuffer = (booking) => {
       return words.trim();
     };
     
-    doc.fillColor("#ffffff").font("Helvetica-Bold").fontSize(8.5).text(numberToWords(booking.amountPaid), 396, 505);
+    doc.fillColor("#ffffff").font("Helvetica-Bold").fontSize(8).text(numberToWords(booking.amountPaid), 396, 532);
 
     // Terms section
-    doc.rect(40, 560, doc.page.width - 80, 80).fill(lightBg).stroke("#e2e8f0");
-    doc.fillColor(textColor).font("Helvetica-Bold").fontSize(8).text("TERMS & CONDITIONS", 50, 570);
+    doc.rect(40, 565, doc.page.width - 80, 80).fill(lightBg).stroke("#e2e8f0");
+    doc.fillColor(textColor).font("Helvetica-Bold").fontSize(8).text("TERMS & CONDITIONS", 50, 575);
     
     doc.font("Helvetica").fontSize(7.5).fillColor("#475569")
-       .text(`* Payment Due: Remaining balance of INR ${remainingBalance.toLocaleString()} is due at boarding or 7 days prior to travel.`, 50, 585)
-       .text("* Cancellation Policy: Free cancellation up to 15 days before travel (excl. non-refundable deposit).", 50, 597)
-       .text("* Inclusions Support: Reach out to booking@sitxplore.in or call +91-9050553507 for hotel query assistance.", 50, 609);
+       .text(`* Payment Due: Remaining balance of INR ${remainingBalance.toLocaleString()} is due at boarding or 7 days prior to travel.`, 50, 590)
+       .text("* Cancellation Policy: Free cancellation up to 15 days before travel (excl. non-refundable deposit).", 50, 602)
+       .text("* Inclusions Support: Reach out to booking@sitxplore.in or call +91-9050553507 for hotel query assistance.", 50, 614);
 
     // Footer contact ribbon
     doc.rect(0, doc.page.height - 45, doc.page.width, 45).fill(primaryColor);
@@ -246,7 +250,7 @@ export const sendInvoiceEmail = async (booking) => {
           </div>
           <div style="background-color: #f1f5f9; padding: 16px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0;">
             <p style="margin: 0;">&copy; ${new Date().getFullYear()} SIT Xplore. All rights reserved.</p>
-            <p style="margin: 4px 0 0 0;">Sonipat, Haryana | booking@sitxplore.in</p>
+            <p style="margin: 4px 0 0 0;">Delhi, India | booking@sitxplore.in</p>
           </div>
         </div>
       `,

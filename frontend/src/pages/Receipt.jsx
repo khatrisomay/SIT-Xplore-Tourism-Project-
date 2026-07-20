@@ -117,8 +117,9 @@ export default function Receipt() {
     );
   }
 
-  const baseCost = Math.round(booking.totalCost / 1.05);
-  const gstAmount = booking.totalCost - baseCost;
+  const discountAmount = booking.discount || 0;
+  const baseCost = Math.round((booking.totalCost + discountAmount) / 1.05);
+  const gstAmount = Math.round(baseCost * 0.05);
   const remainingBalance = booking.totalCost - booking.amountPaid;
   const invoiceNumStr = booking.bookingId.slice(-4).toUpperCase();
   const formattedDate = new Date(booking.createdAt).toLocaleDateString("en-IN", {
@@ -253,7 +254,7 @@ export default function Receipt() {
                   SIT <span className="text-[#e0a816]">XPLORE</span>
                 </span>
                 <p className="text-[10px] text-gray-300 tracking-widest uppercase font-outfit mt-0.5">EXPLORE MORE, WORRY LESS</p>
-                <p className="text-[10px] text-gray-400 font-medium mt-1">Sonipat, Haryana | booking@sitxplore.in | www.sitxplore.in</p>
+                <p className="text-[10px] text-gray-400 font-medium mt-1">Delhi, India | booking@sitxplore.in | www.sitxplore.in</p>
               </div>
             </div>
 
@@ -350,6 +351,12 @@ export default function Receipt() {
                     <td className="p-4 pl-6 text-gray-500 font-bold">GST (5%)</td>
                     <td className="p-4 pr-6 text-slate-800 font-semibold">₹ {gstAmount.toLocaleString("en-IN")}</td>
                   </tr>
+                  {booking.discount > 0 && (
+                    <tr className="hover:bg-slate-50/50 text-green-700">
+                      <td className="p-4 pl-6 font-bold text-green-700">Coupon Discount ({booking.couponCode})</td>
+                      <td className="p-4 pr-6 font-extrabold">- ₹ {booking.discount.toLocaleString("en-IN")}</td>
+                    </tr>
+                  )}
                   <tr className="hover:bg-slate-50/50">
                     <td className="p-4 pl-6 text-gray-500 font-bold">Total Package Rate (incl. GST)</td>
                     <td className="p-4 pr-6 text-slate-900 font-extrabold">₹ {booking.totalCost?.toLocaleString("en-IN")}</td>
