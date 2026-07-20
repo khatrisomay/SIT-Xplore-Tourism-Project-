@@ -56,9 +56,9 @@ export default function Footer() {
               <Mail className="w-4 h-4 text-brand-500 shrink-0" />
               <a href="mailto:booking@sitxplore.in" className="hover:text-white transition-colors">booking@sitxplore.in</a>
             </li>
-            <li className="flex items-center gap-3">
-              <MapPin className="w-4 h-4 text-brand-500 shrink-0" />
-              <span>Delhi, India</span>
+            <li className="flex items-start gap-3">
+              <MapPin className="w-4 h-4 text-brand-500 shrink-0 mt-0.5" />
+              <span className="leading-relaxed text-xs">near Maharaja agrasen dharamshala, Pocket 4, Sector 16G, Rohini, Delhi, 110089</span>
             </li>
           </ul>
         </div>
