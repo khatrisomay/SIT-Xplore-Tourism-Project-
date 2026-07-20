@@ -2,6 +2,8 @@ import express from "express";
 import {
   createBooking,
   confirmPayment,
+  createRazorpayOrder,
+  verifyRazorpayPayment,
   listBookings,
   getMyBookings,
   deleteBooking,
@@ -12,6 +14,8 @@ const bookingRouter = express.Router();
 
 bookingRouter.post("/", authMiddleware, createBooking);
 bookingRouter.post("/confirm", authMiddleware, confirmPayment);
+bookingRouter.post("/razorpay-order", authMiddleware, createRazorpayOrder);
+bookingRouter.post("/verify-razorpay", authMiddleware, verifyRazorpayPayment);
 bookingRouter.get("/", authMiddleware, adminMiddleware, listBookings);
 bookingRouter.get("/my", authMiddleware, getMyBookings);
 bookingRouter.delete("/:id", authMiddleware, deleteBooking);

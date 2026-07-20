@@ -42,23 +42,85 @@ export default function VerifyPayment() {
     fetchBookingDetails();
   }, [bookingId]);
 
-  const handleMockPayment = async () => {
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleRazorpayPayment = async () => {
     setPaying(true);
     setError("");
+
+    const resLoad = await loadRazorpay();
+    if (!resLoad) {
+      setError("Razorpay SDK failed to load. Are you online?");
+      setPaying(false);
+      return;
+    }
+
     try {
-      const res = await axios.post("/api/bookings/confirm", {
+      const { data: orderData } = await axios.post("/api/bookings/razorpay-order", {
         bookingId: booking.bookingId,
-        transactionId: `txn_stripe_mock_${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
       });
 
-      if (res.data?.success) {
-        navigate(`/receipt/${res.data.booking._id}`);
-      } else {
-        setError(res.data?.message || "Mock payment confirmation failed.");
+      if (!orderData.success) {
+        setError(orderData.message || "Failed to create order.");
+        setPaying(false);
+        return;
       }
+
+      const options = {
+        key: "rzp_live_TFmNMQhNDfu8A7",
+        amount: orderData.order.amount,
+        currency: "INR",
+        name: "SIT Xplore",
+        description: "Booking Deposit for " + booking.package.title,
+        image: "/sit xplore new logo.png",
+        order_id: orderData.order.id,
+        handler: async function (response) {
+          try {
+            setPaying(true);
+            const verifyRes = await axios.post("/api/bookings/verify-razorpay", {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              bookingId: booking.bookingId,
+            });
+            if (verifyRes.data.success) {
+              navigate(`/receipt/${verifyRes.data.booking._id}`);
+            } else {
+              setError("Payment verification failed.");
+              setPaying(false);
+            }
+          } catch (err) {
+            console.error("Verification error:", err);
+            setError("Error verifying payment.");
+            setPaying(false);
+          }
+        },
+        prefill: {
+          name: booking.customerName,
+          email: booking.customerEmail,
+          contact: booking.customerPhone,
+        },
+        theme: {
+          color: "#eab308",
+        },
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.on("payment.failed", function (response) {
+        setError("Payment failed: " + response.error.description);
+      });
+      paymentObject.open();
     } catch (err) {
-      console.error("Payment confirmation error:", err);
-      setError("Network error confirming reservation payment.");
+      console.error("Payment initiation error:", err);
+      setError(err.response?.data?.message || "Failed to initialize payment.");
     } finally {
       setPaying(false);
     }
@@ -126,12 +188,12 @@ export default function VerifyPayment() {
               {/* Secure transaction notice */}
               <div className="flex gap-3 items-center text-xs text-gray-500 dark:text-gray-455 px-2 leading-relaxed">
                 <ShieldCheck className="w-8 h-8 text-brand-600 dark:text-brand-500 shrink-0" />
-                <p>By clicking confirm, you authorize a mock transaction to simulate credit card checkout processing. The booking will transition to paid status in the database.</p>
+                <p>By clicking confirm, you authorize a secure transaction via Razorpay. Your payment details are fully encrypted and the booking will be confirmed instantly.</p>
               </div>
 
               {/* Pay trigger */}
               <button
-                onClick={handleMockPayment}
+                onClick={handleRazorpayPayment}
                 disabled={paying}
                 className="w-full py-4 bg-brand-500 hover:bg-brand-400 disabled:bg-brand-500/50 text-black text-sm font-outfit font-extrabold rounded-2xl shadow-xl shadow-brand-500/10 hover:shadow-brand-500/25 transition-all flex items-center justify-center gap-2"
               >
