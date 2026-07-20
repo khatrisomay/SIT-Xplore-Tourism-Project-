@@ -138,6 +138,14 @@ export default function Receipt() {
             margin: 0 !important;
             padding: 0 !important;
           }
+          main {
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          main > * {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+          }
           .print-exact {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -145,7 +153,7 @@ export default function Receipt() {
           }
           /* Scale container slightly down for standard A4 paper height to fit on a single sheet */
           article {
-            transform: scale(0.92);
+            transform: scale(0.85);
             transform-origin: top center;
             margin: 0 auto !important;
             padding: 0 !important;
