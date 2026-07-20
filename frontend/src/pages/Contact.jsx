@@ -131,7 +131,7 @@ export default function Contact() {
                   <div>
                     <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold block">Base Location</span>
                     <span className="text-sm font-semibold text-slate-800 dark:text-white">
-                      Rishikesh / Delhi, India
+                      Delhi, India
                     </span>
                   </div>
                 </div>
