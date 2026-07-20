@@ -128,82 +128,65 @@ export default function Receipt() {
   return (
     <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300 print:bg-white print:text-black">
       
-      {/* Print color adjustment overrides */}
+      {/* Print page style settings for full width premium spacing */}
       <style>{`
+        @page {
+          size: A4 portrait;
+          margin: 15mm 15mm 15mm 15mm;
+        }
         @media print {
           body, html, #root {
             background-color: white !important;
             background: white !important;
-            color: black !important;
+            color: #1e293b !important;
+            font-size: 12px !important;
             margin: 0 !important;
             padding: 0 !important;
-            font-size: 11px !important;
           }
           main {
             padding: 0 !important;
             margin: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
           }
+          /* Reset container margins for print */
           main > * {
             margin-top: 0 !important;
             margin-bottom: 0 !important;
             padding: 0 !important;
           }
-          /* Visual scale transform */
-          article {
-            margin: 0 auto !important;
-            padding: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
-            page-break-inside: avoid !important;
-            width: 100% !important;
-            max-width: 100% !important;
+          /* Hide non-printable elements */
+          .print-hidden, .print\\:hidden {
+            display: none !important;
           }
-          /* Compress layout boxes for printing */
+          /* Force colors and background colors printing */
           .print-exact {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
             color-adjust: exact !important;
           }
-          /* Direct layout padding & margin compression */
-          table td {
-            padding: 4px 8px !important;
+          /* Card layout resets for print */
+          article {
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            border-radius: 0 !important;
           }
-          .p-6, .py-6, .px-6 {
-            padding: 8px 12px !important;
+          /* Natural spacing between main invoice sections */
+          .invoice-section {
+            margin-bottom: 24px !important;
+            page-break-inside: avoid !important;
           }
-          .py-4, .px-4 {
-            padding: 4px 12px !important;
+          table {
+            width: 100% !important;
+            border-collapse: collapse !important;
           }
-          .p-5 {
-            padding: 8px 12px !important;
-          }
-          .my-4, .my-3, .my-2 {
-            margin-top: 4px !important;
-            margin-bottom: 4px !important;
-          }
-          .mx-6 {
-            margin-left: 12px !important;
-            margin-right: 12px !important;
-          }
-          .gap-6 {
-            gap: 8px !important;
-          }
-          .space-y-3 > * + * {
-            margin-top: 4px !important;
-          }
-          .space-y-4 > * + * {
-            margin-top: 6px !important;
-          }
-          h2 {
-            font-size: 1.5rem !important;
-            line-height: 2rem !important;
-          }
-          .text-3xl {
-            font-size: 1.5rem !important;
-          }
-          img.w-14 {
-            width: 2.5rem !important;
-            height: 2.5rem !important;
+          table th, table td {
+            padding: 10px 14px !important;
+            border-bottom: 1px solid #e2e8f0 !important;
           }
         }
       `}</style>
@@ -212,7 +195,7 @@ export default function Receipt() {
         <Navbar />
       </div>
 
-      <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-12 space-y-8 print:py-0 print:px-0">
+      <main className="flex-grow max-w-4xl mx-auto w-full px-6 py-12 space-y-8 print:py-0 print:px-0">
         
         {/* Breadcrumbs (Hide on print) */}
         <div className="flex items-center gap-2 text-xs text-gray-500 font-outfit print:hidden">
@@ -238,195 +221,165 @@ export default function Receipt() {
         <article className="rounded-3xl bg-white text-slate-800 border border-gray-250 shadow-2xl relative overflow-hidden print:border-none print:shadow-none transition-colors duration-300">
           
           {/* Header Curved Banner */}
-          <div className="relative bg-[#072113] text-white p-6 pb-8 print:py-4 print:px-6 overflow-hidden flex flex-col sm:flex-row justify-between items-center border-b-4 border-[#e0a816] print-exact">
+          <div className="invoice-section relative bg-[#072113] text-white p-8 overflow-hidden flex flex-col md:flex-row justify-between items-center border-b-4 border-[#e0a816] rounded-t-3xl print-exact">
             
             {/* Decorative yellow wave accent background */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#e0a816] rounded-bl-full opacity-10 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#e0a816] rounded-bl-full opacity-5 pointer-events-none" />
 
-            <div className="flex items-center gap-3 relative z-10">
+            <div className="flex flex-col md:flex-row items-center gap-4 relative z-10 text-center md:text-left">
               <img
                 src="/sit xplore new logo.png"
                 alt="SIT Xplore Logo"
-                className="w-14 h-14 object-cover rounded-full border-2 border-white/20"
+                className="w-16 h-16 object-cover rounded-full border-2 border-white/20"
               />
               <div>
-                <span className="font-outfit font-extrabold text-2xl tracking-wider text-white">
+                <span className="font-outfit font-extrabold text-3xl tracking-wider text-white">
                   SIT <span className="text-[#e0a816]">XPLORE</span>
                 </span>
-                <p className="text-[10px] text-gray-300 tracking-widest uppercase font-outfit">EXPLORE MORE, WORRY LESS</p>
+                <p className="text-[10px] text-gray-300 tracking-widest uppercase font-outfit mt-0.5">EXPLORE MORE, WORRY LESS</p>
+                <p className="text-[10px] text-gray-400 font-medium mt-1">Sonipat, Haryana | booking@sitxplore.in | www.sitxplore.in</p>
               </div>
             </div>
 
             {/* Google review and served stats */}
-            <div className="mt-4 sm:mt-0 text-[9px] font-outfit font-bold uppercase tracking-wider space-y-1 text-center sm:text-right relative z-10">
-              <div className="flex items-center justify-center sm:justify-end gap-1">
+            <div className="mt-6 md:mt-0 text-[10px] font-outfit font-bold uppercase tracking-wider space-y-1.5 text-center md:text-right relative z-10 border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6">
+              <div className="flex items-center justify-center md:justify-end gap-1.5">
                 <span>🛡️</span> 50K+ TRIPS SERVED
               </div>
-              <div className="flex items-center justify-center sm:justify-end gap-1">
+              <div className="flex items-center justify-center md:justify-end gap-1.5">
                 <span>👥</span> 70,000+ HAPPY TRAVELERS
               </div>
-              <div className="flex items-center justify-center sm:justify-end gap-1 text-[#e0a816]">
+              <div className="flex items-center justify-center md:justify-end gap-1.5 text-[#e0a816]">
                 <span>★</span> 5★ GOOGLE REVIEWS
               </div>
             </div>
           </div>
 
-          {/* Company Details & Invoice Metadata */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 print:py-3 print:px-6 print:gap-3 border-b border-gray-150">
-            {/* Company Info */}
-            <div className="space-y-1 text-xs text-slate-600">
-              <h3 className="font-outfit font-extrabold text-sm text-[#072113]">SIT XPLORE</h3>
-              <p className="text-[10px] text-gray-400 font-medium">(Sterling International Travel and Xplore)</p>
-              <div className="space-y-1 pt-2 font-medium">
-                <p className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#e0a816] shrink-0" /> <span><strong>Head Office:</strong> Sonipat, Haryana</span></p>
-                <p className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-[#e0a816] shrink-0" /> <span><strong>Email:</strong> booking@sitxplore.in</span></p>
-                <p className="flex items-center gap-2"><Globe className="w-3.5 h-3.5 text-[#e0a816] shrink-0" /> <span><strong>Website:</strong> www.sitxplore.in</span></p>
-                <p className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-[#e0a816] shrink-0" /> <span><strong>Contact:</strong> 9050553507, 7027878371</span></p>
-              </div>
+          {/* Invoice Information Two-Column Header */}
+          <div className="invoice-section grid grid-cols-1 md:grid-cols-2 gap-6 p-8 border-b border-gray-150">
+            <div className="space-y-1.5">
+              <span className="text-[10px] text-gray-400 uppercase tracking-widest font-extrabold block">Booking Invoice</span>
+              <h2 className="font-outfit font-extrabold text-2xl text-slate-800 uppercase tracking-tight">{booking.package?.title}</h2>
+              <p className="text-xs text-gray-500 font-medium">Category: {booking.package?.category}</p>
             </div>
 
-            {/* Invoice Info */}
-            <div className="space-y-4 md:pl-6 md:border-l border-gray-150 flex flex-col justify-between print:space-y-2">
-              <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-outfit font-extrabold text-slate-800 tracking-wider">INVOICE</h2>
-                <div className="px-4 py-1.5 bg-[#072113] rounded text-[#e0a816] font-outfit font-extrabold text-sm shadow print-exact">
-                  INVOICE NO. : {invoiceNumStr}
-                </div>
+            <div className="flex flex-col justify-between md:items-end">
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-gray-500 font-medium">Invoice No:</span>
+                <span className="px-3 py-1 bg-[#072113] rounded text-[#e0a816] font-outfit font-extrabold text-xs tracking-wider print-exact">
+                  SITX-{invoiceNumStr}
+                </span>
               </div>
-              <div className="space-y-1.5 text-xs text-slate-600 font-medium print:space-y-1">
-                <p className="flex justify-between border-b border-gray-100 pb-1">
-                  <span className="text-gray-400">INVOICE DATE :</span> 
-                  <strong className="text-slate-800">{formattedDate}</strong>
-                </p>
-                <p className="flex justify-between border-b border-gray-100 pb-1">
-                  <span className="text-gray-400">BOOKING DATE :</span> 
-                  <strong className="text-slate-800">{formattedDate}</strong>
-                </p>
+              <div className="space-y-1 text-xs text-slate-600 font-semibold mt-2 md:mt-0 md:text-right">
+                <p>INVOICE DATE : <span className="text-slate-800 font-bold">{formattedDate}</span></p>
+                <p>BOOKING DATE : <span className="text-slate-800 font-bold">{formattedDate}</span></p>
               </div>
             </div>
           </div>
 
           {/* Customer Details */}
-          <div className="px-6 py-4 print:py-2.5 print:px-6 space-y-3 print:space-y-1.5">
-            <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816] print-exact">
-              Customer Details
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 rounded-2xl p-4 print:p-3 bg-[#fcfbfa]">
-              <div className="space-y-2 text-xs text-slate-700 print:space-y-1">
-                <p className="flex items-center gap-2"><User className="w-3.5 h-3.5 text-gray-400" /> <span><strong>NAME:</strong> {booking.customerName}</span></p>
-                <p className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-gray-400" /> <span><strong>EMAIL ID:</strong> {booking.customerEmail}</span></p>
+          <div className="invoice-section px-8 py-2">
+            <h3 className="font-outfit font-extrabold text-xs uppercase tracking-wider text-slate-500 mb-3">Customer Details</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border border-gray-150 rounded-2xl p-6 bg-[#fcfbfa]">
+              <div className="space-y-1">
+                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Lead Traveler</span>
+                <p className="text-sm font-bold text-slate-800 flex items-center gap-2">👤 {booking.customerName}</p>
               </div>
-              <div className="space-y-2 text-xs text-slate-700 md:border-l border-gray-200 md:pl-4 print:space-y-1">
-                <p className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-gray-400" /> <span><strong>MOBILE NO:</strong> {booking.customerPhone}</span></p>
+              <div className="space-y-1 md:border-l border-gray-200 md:pl-6">
+                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Email ID</span>
+                <p className="text-sm font-bold text-slate-800 flex items-center gap-2">✉ {booking.customerEmail}</p>
+              </div>
+              <div className="space-y-1 md:border-l border-gray-200 md:pl-6">
+                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Mobile Number</span>
+                <p className="text-sm font-bold text-slate-800 flex items-center gap-2">📞 {booking.customerPhone}</p>
               </div>
             </div>
           </div>
 
-          {/* Travel Details */}
-          <div className="px-6 py-4 print:py-2.5 print:px-6 space-y-3 print:space-y-1.5">
-            <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816] print-exact">
-              Travel Details
-            </div>
+          {/* Travel Details Table */}
+          <div className="invoice-section px-8 py-2">
+            <h3 className="font-outfit font-extrabold text-xs uppercase tracking-wider text-slate-500 mb-3">Travel Details</h3>
             <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-sm bg-white">
               <table className="w-full text-left text-xs border-collapse">
-                <tbody className="divide-y divide-gray-150 text-slate-700">
-                  <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 print:p-2 font-bold w-1/3 flex items-center gap-2 text-gray-500"><Calendar className="w-3.5 h-3.5" /> TRAVEL DATE</td>
-                    <td className="p-3 print:p-2 w-6 text-center">:</td>
-                    <td className="p-3 print:p-2 font-medium text-slate-800">{booking.travelDate}</td>
+                <thead>
+                  <tr className="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold border-b border-gray-200">
+                    <th className="p-4 pl-6">Travel Parameter</th>
+                    <th className="p-4 pr-6">Details</th>
                   </tr>
-                  <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><User className="w-3.5 h-3.5" /> TRAVEL TYPE</td>
-                    <td className="p-3 print:p-2 text-center">:</td>
-                    <td className="p-3 print:p-2 font-medium text-slate-800">
-                      {booking.totalTravelers === 1 ? "Solo Travel (1 Pax)" : `Group Travel (${booking.totalTravelers} Pax)`}
+                </thead>
+                <tbody className="divide-y divide-gray-150 text-slate-700 font-medium">
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="p-4 pl-6 text-gray-500 font-bold">Departure Date</td>
+                    <td className="p-4 pr-6 text-slate-800 font-bold">{booking.travelDate}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="p-4 pl-6 text-gray-500 font-bold">Number of Travelers</td>
+                    <td className="p-4 pr-6 text-slate-800">
+                      {booking.totalTravelers} Traveler(s) {booking.travelersList?.length > 0 && `(${booking.travelersList.join(", ")})`}
                     </td>
                   </tr>
-                  <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><BedSingle className="w-3.5 h-3.5" /> ROOM SHARING</td>
-                    <td className="p-3 print:p-2 text-center">:</td>
-                    <td className="p-3 print:p-2 font-medium text-slate-800 capitalize">
-                      {booking.sharingSelected?.replace("Sharing", " Sharing")}
-                    </td>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="p-4 pl-6 text-gray-500 font-bold">Room Sharing</td>
+                    <td className="p-4 pr-6 text-slate-800 capitalize">{booking.sharingSelected?.replace("Sharing", " Sharing")}</td>
                   </tr>
-                  <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><MapPin className="w-3.5 h-3.5" /> ROUTE</td>
-                    <td className="p-3 print:p-2 text-center">:</td>
-                    <td className="p-3 print:p-2 font-medium text-slate-800">{booking.package?.title}</td>
-                  </tr>
-                  <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><CreditCard className="w-3.5 h-3.5" /> TOTAL PACKAGE RATE</td>
-                    <td className="p-3 print:p-2 text-center">:</td>
-                    <td className="p-3 print:p-2 font-extrabold text-slate-950 text-sm">₹ {booking.totalCost?.toLocaleString("en-IN")}</td>
-                  </tr>
-                  <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><Check className="w-3.5 h-3.5 text-green-600" /> PAID ADVANCE</td>
-                    <td className="p-3 print:p-2 text-center">:</td>
-                    <td className="p-3 print:p-2 font-extrabold text-green-600 text-sm">₹ {booking.amountPaid?.toLocaleString("en-IN")}</td>
-                  </tr>
-                  <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 print:p-2 font-bold flex items-center gap-2 text-gray-500"><FileText className="w-3.5 h-3.5 text-red-500" /> LEFT AMOUNT</td>
-                    <td className="p-3 print:p-2 text-center">:</td>
-                    <td className="p-3 print:p-2 font-extrabold text-red-600 text-sm">₹ {remainingBalance?.toLocaleString("en-IN")}</td>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="p-4 pl-6 text-gray-500 font-bold">Route & Destination</td>
+                    <td className="p-4 pr-6 text-slate-800">{booking.package?.title}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          {/* Pricing calculations Block */}
-          <div className="mx-6 my-4 print:my-2 bg-[#072113] text-white rounded-2xl p-5 print:py-3 print:px-6 flex flex-col sm:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816] print-exact">
-            <div>
-              <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block">TOTAL PAID (ADVANCE)</span>
-              <span className="text-3xl font-outfit font-extrabold text-[#e0a816]">₹ {booking.amountPaid?.toLocaleString("en-IN")}</span>
-            </div>
-            <div className="flex items-center gap-3 sm:border-l border-white/10 sm:pl-6 w-full sm:w-auto">
-              <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white shrink-0">
-                <FileText className="w-5 h-5 text-[#e0a816]" />
+          {/* Payment Summary Cards */}
+          <div className="invoice-section px-8 py-2">
+            <h3 className="font-outfit font-extrabold text-xs uppercase tracking-wider text-slate-500 mb-3">Payment Summary</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+              <div className="border border-gray-150 rounded-2xl p-5 bg-white shadow-sm flex flex-col justify-between">
+                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Total Cost</span>
+                <span className="text-2xl font-outfit font-extrabold text-slate-800 mt-2">₹ {booking.totalCost?.toLocaleString("en-IN")}</span>
               </div>
+              <div className="border border-gray-150 rounded-2xl p-5 bg-white shadow-sm flex flex-col justify-between">
+                <span className="text-[10px] text-green-500 font-bold uppercase tracking-wider block">Advance Paid</span>
+                <span className="text-2xl font-outfit font-extrabold text-green-600 mt-2">₹ {booking.amountPaid?.toLocaleString("en-IN")}</span>
+              </div>
+              <div className="border border-gray-150 rounded-2xl p-5 bg-white shadow-sm flex flex-col justify-between">
+                <span className="text-[10px] text-red-500 font-bold uppercase tracking-wider block">Remaining Balance</span>
+                <span className="text-2xl font-outfit font-extrabold text-red-600 mt-2">₹ {remainingBalance?.toLocaleString("en-IN")}</span>
+              </div>
+            </div>
+            
+            <div className="bg-[#072113] text-white rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816] print-exact">
               <div>
-                <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">AMOUNT (IN WORDS)</span>
-                <span className="text-xs font-semibold text-white">{numberToWords(booking.amountPaid)}</span>
+                <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block">Paid Advance (In Words)</span>
+                <span className="text-sm font-semibold text-white mt-1 block">{numberToWords(booking.amountPaid)}</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1 bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-extrabold tracking-widest rounded-full uppercase print-exact">
+                ✓ Fully Paid
               </div>
             </div>
           </div>
 
-          {/* Payment Terms and Signatures */}
-          <div className="p-6 print:py-3 print:px-6 grid grid-cols-1 sm:grid-cols-3 gap-6 items-center border-t border-gray-100">
-            {/* Payment Status Check */}
-            <div className="space-y-1">
-              <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">PAYMENT STATUS</span>
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-500/10 border border-green-500/20 text-green-600 text-[10px] font-extrabold tracking-widest rounded-full uppercase print-exact">
-                ✓ PAID
-              </span>
-            </div>
-
-            {/* Booking Terms details */}
-            <div className="text-[10px] text-slate-500 leading-normal font-medium">
-              <strong className="text-slate-800 block text-[11px] mb-0.5">PAYMENT TERMS:</strong>
-              50% Advance & 50% Remaining at the Time of Boarding.
-            </div>
-
-            {/* Signature Thank you block */}
-            <div className="text-center sm:text-right font-outfit text-xs text-slate-500 sm:border-l border-gray-150 pt-4 sm:pt-0 sm:pl-6 space-y-1">
-              <p className="italic font-bold text-slate-800 text-sm">Thank You!</p>
-              <p className="text-[10px]">For Choosing <span className="font-extrabold text-[#072113]">SIT <span className="text-[#e0a816]">XPLORE</span></span></p>
+          {/* Terms & Conditions */}
+          <div className="invoice-section px-8 py-2">
+            <h3 className="font-outfit font-extrabold text-xs uppercase tracking-wider text-slate-500 mb-3">Terms & Conditions</h3>
+            <div className="border border-gray-150 rounded-2xl p-6 bg-[#fcfbfa] text-[11px] text-slate-500 leading-relaxed space-y-2">
+              <p>• <strong>Payment Due:</strong> The remaining balance of ₹ {remainingBalance?.toLocaleString("en-IN")} is due at the boarding time or 7 days prior to travel dates.</p>
+              <p>• <strong>Cancellation Policy:</strong> Free cancellations are allowed up to 15 days before the departure date (excluding non-refundable reservation deposit charges).</p>
+              <p>• <strong>Reporting Time:</strong> Please report at the specified pickup coordinates at least 30 minutes before the departure schedule.</p>
+              <p>• <strong>Inclusions Support:</strong> For queries regarding hotel stays, sharing configurations, or route maps, reach out to booking@sitxplore.in or call +91-9050553507.</p>
             </div>
           </div>
 
-          {/* Footer banner strip */}
-          <div className="bg-[#072113] text-white p-4 print:py-2.5 print:px-6 rounded-b-3xl flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] font-outfit font-semibold tracking-wider uppercase border-t-2 border-[#e0a816]/20 print-exact">
-            <div className="flex items-center gap-2">
-              <Shield className="w-3.5 h-3.5 text-[#e0a816]" />
-              <span><strong>24x7 TRAVEL SUPPORT</strong> | TRUSTED • SAFE • MEMORABLE</span>
+          {/* Footer strip */}
+          <div className="bg-[#072113] text-white p-6 rounded-b-3xl flex flex-col md:flex-row justify-between items-center gap-4 border-t-2 border-[#e0a816]/20 print-exact">
+            <div className="space-y-1 text-center md:text-left">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-white">SIT Xplore Support</p>
+              <p className="text-[10px] text-gray-400 font-medium">📞 +91-9050553507, 7027878371 | ✉ booking@sitxplore.in | 🌐 www.sitxplore.in</p>
             </div>
-            <div className="flex items-center gap-3 text-[9px]">
-              <span>FOLLOW US:</span>
-              <a href="https://www.instagram.com/sit_xplore/" target="_blank" rel="noopener noreferrer" className="text-[#e0a816] hover:underline">Instagram</a>
-              <span>•</span>
-              <span className="text-gray-400">Facebook</span>
-              <span>•</span>
-              <span className="text-gray-400">YouTube</span>
+            <div className="flex flex-col items-center md:items-end gap-1 font-outfit text-xs">
+              <p className="italic font-bold text-white text-sm">Thank You for Booking!</p>
+              <p className="text-[9px] text-[#e0a816] tracking-widest uppercase font-extrabold">Explore More, Worry Less</p>
             </div>
           </div>
 
