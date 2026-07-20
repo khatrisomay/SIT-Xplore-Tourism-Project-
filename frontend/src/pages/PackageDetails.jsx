@@ -29,6 +29,10 @@ export default function PackageDetails() {
 
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingError, setBookingError] = useState("");
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState("");
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponError, setCouponError] = useState("");
 
   useEffect(() => {
     const fetchPackage = async () => {
@@ -88,7 +92,7 @@ export default function PackageDetails() {
   const pricePerPerson = pkg.sharingPrices?.[sharing] || 0;
   const baseCost = pricePerPerson * travelersCount;
   const gstAmount = Math.round(baseCost * 0.05);
-  const totalCost = baseCost + gstAmount;
+  const totalCost = Math.max(0, baseCost + gstAmount - couponDiscount);
   const depositRequired = (pkg.bookingDeposit || 3000) * travelersCount;
 
   const handleTravelersCountChange = (val) => {
@@ -119,6 +123,33 @@ export default function PackageDetails() {
     });
   };
 
+  const handleApplyCoupon = (e) => {
+    e.preventDefault();
+    setCouponError("");
+    const code = couponCode.toUpperCase().trim();
+    const coupons = {
+      "SITX500": 500,
+      "TRIP500": 500,
+      "XPLORE500": 500,
+      "SITX1000": 1000,
+      "TRIP1000": 1000,
+      "XPLORE1000": 1000
+    };
+    if (!code) {
+      setCouponError("Please enter a coupon code.");
+      return;
+    }
+    if (coupons[code]) {
+      setCouponDiscount(coupons[code]);
+      setAppliedCoupon(code);
+      setCouponError("");
+    } else {
+      setCouponError("Invalid coupon code.");
+      setCouponDiscount(0);
+      setAppliedCoupon("");
+    }
+  };
+
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
     setBookingError("");
@@ -145,6 +176,7 @@ export default function PackageDetails() {
         sharingSelected: sharing,
         totalTravelers: travelersCount,
         travelersList: JSON.stringify(travelersList.filter(name => name.trim() !== "")),
+        couponCode: appliedCoupon,
       });
 
       if (res.data?.success) {
@@ -399,6 +431,33 @@ export default function PackageDetails() {
                 />
               </div>
 
+              {/* Coupon Code Input */}
+              <div className="space-y-1.5 pt-2 border-t border-[#d1cfc7] dark:border-white/5">
+                <label className="text-[10px] font-bold uppercase text-gray-500 tracking-wider block">Have a Coupon Code?</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Enter Coupon Code"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    className="flex-grow bg-[#ecebe6]/60 dark:bg-white/5 border border-[#d1cfc7] dark:border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-white uppercase focus:outline-none focus:border-brand-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    className="px-4 bg-brand-500 hover:bg-brand-400 text-black text-xs font-outfit font-bold rounded-xl transition-all"
+                  >
+                    Apply
+                  </button>
+                </div>
+                {couponError && (
+                  <p className="text-[10px] text-red-500 font-semibold">{couponError}</p>
+                )}
+                {appliedCoupon && (
+                  <p className="text-[10px] text-green-600 font-bold">✓ Coupon {appliedCoupon} applied successfully!</p>
+                )}
+              </div>
+
               {/* Booking Cost Output */}
               <div className="bg-[#ecebe6]/60 dark:bg-white/5 border border-[#d1cfc7] dark:border-white/5 rounded-2xl p-4 space-y-2">
                 <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
@@ -409,6 +468,12 @@ export default function PackageDetails() {
                   <span>GST (5%):</span>
                   <span className="font-outfit font-bold text-slate-850 dark:text-white">₹{gstAmount.toLocaleString("en-IN")}</span>
                 </div>
+                {couponDiscount > 0 && (
+                  <div className="flex justify-between text-xs text-green-600 font-bold">
+                    <span>Coupon Discount ({appliedCoupon}):</span>
+                    <span>- ₹{couponDiscount.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-xs font-semibold text-slate-800 dark:text-white border-t border-[#d1cfc7] dark:border-white/5 pt-2">
                   <span>Total Package Cost (incl. GST):</span>
                   <span className="font-outfit font-bold">₹{totalCost.toLocaleString("en-IN")}</span>
