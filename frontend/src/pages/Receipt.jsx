@@ -291,9 +291,19 @@ export default function Receipt() {
                     <td className="p-3 font-medium text-slate-800">{booking.package?.title}</td>
                   </tr>
                   <tr className="hover:bg-gray-50/50">
-                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><CreditCard className="w-3.5 h-3.5" /> PACKAGE RATE</td>
+                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><CreditCard className="w-3.5 h-3.5" /> TOTAL PACKAGE RATE</td>
                     <td className="p-3 text-center">:</td>
-                    <td className="p-3 font-extrabold text-slate-900 text-sm">₹ {booking.totalCost?.toLocaleString("en-IN")}</td>
+                    <td className="p-3 font-extrabold text-slate-950 text-sm">₹ {booking.totalCost?.toLocaleString("en-IN")}</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50/50">
+                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><Check className="w-3.5 h-3.5 text-green-600" /> PAID ADVANCE</td>
+                    <td className="p-3 text-center">:</td>
+                    <td className="p-3 font-extrabold text-green-600 text-sm">₹ {booking.amountPaid?.toLocaleString("en-IN")}</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50/50">
+                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><FileText className="w-3.5 h-3.5 text-red-500" /> LEFT AMOUNT</td>
+                    <td className="p-3 text-center">:</td>
+                    <td className="p-3 font-extrabold text-red-600 text-sm">₹ {remainingBalance?.toLocaleString("en-IN")}</td>
                   </tr>
                 </tbody>
               </table>
@@ -303,8 +313,8 @@ export default function Receipt() {
           {/* Pricing calculations Block */}
           <div className="mx-6 my-4 bg-[#072113] text-white rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816] print-exact">
             <div>
-              <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block">TOTAL AMOUNT</span>
-              <span className="text-3xl font-outfit font-extrabold text-[#e0a816]">₹ {booking.totalCost?.toLocaleString("en-IN")}</span>
+              <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block">TOTAL PAID (ADVANCE)</span>
+              <span className="text-3xl font-outfit font-extrabold text-[#e0a816]">₹ {booking.amountPaid?.toLocaleString("en-IN")}</span>
             </div>
             <div className="flex items-center gap-3 sm:border-l border-white/10 sm:pl-6 w-full sm:w-auto">
               <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white shrink-0">
@@ -312,7 +322,7 @@ export default function Receipt() {
               </div>
               <div>
                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">AMOUNT (IN WORDS)</span>
-                <span className="text-xs font-semibold text-white">{numberToWords(booking.totalCost)}</span>
+                <span className="text-xs font-semibold text-white">{numberToWords(booking.amountPaid)}</span>
               </div>
             </div>
           </div>
