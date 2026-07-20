@@ -117,6 +117,8 @@ export default function Receipt() {
     );
   }
 
+  const baseCost = Math.round(booking.totalCost / 1.05);
+  const gstAmount = booking.totalCost - baseCost;
   const remainingBalance = booking.totalCost - booking.amountPaid;
   const invoiceNumStr = booking.bookingId.slice(-4).toUpperCase();
   const formattedDate = new Date(booking.createdAt).toLocaleDateString("en-IN", {
@@ -340,6 +342,18 @@ export default function Receipt() {
                     <td className="p-4 pl-6 text-gray-500 font-bold">Route & Destination</td>
                     <td className="p-4 pr-6 text-slate-800">{booking.package?.title}</td>
                   </tr>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="p-4 pl-6 text-gray-500 font-bold">Base Package Cost</td>
+                    <td className="p-4 pr-6 text-slate-800 font-semibold">₹ {baseCost.toLocaleString("en-IN")}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="p-4 pl-6 text-gray-500 font-bold">GST (5%)</td>
+                    <td className="p-4 pr-6 text-slate-800 font-semibold">₹ {gstAmount.toLocaleString("en-IN")}</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/50">
+                    <td className="p-4 pl-6 text-gray-500 font-bold">Total Package Rate (incl. GST)</td>
+                    <td className="p-4 pr-6 text-slate-900 font-extrabold">₹ {booking.totalCost?.toLocaleString("en-IN")}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -350,7 +364,7 @@ export default function Receipt() {
             <h3 className="font-outfit font-extrabold text-xs uppercase tracking-wider text-slate-500 mb-3">Payment Summary</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 print:grid-cols-3 gap-6 mb-4">
               <div className="border border-gray-150 rounded-2xl p-5 bg-white shadow-sm flex flex-col justify-between">
-                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Total Cost</span>
+                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">Total Cost (incl. GST)</span>
                 <span className="text-2xl font-outfit font-extrabold text-slate-800 mt-2">₹ {booking.totalCost?.toLocaleString("en-IN")}</span>
               </div>
               <div className="border border-gray-150 rounded-2xl p-5 bg-white shadow-sm flex flex-col justify-between">

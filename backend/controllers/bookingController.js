@@ -36,7 +36,9 @@ export const createBooking = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid sharing type selected." });
     }
 
-    const totalCost = pricePerPerson * Number(totalTravelers);
+    const baseCost = pricePerPerson * Number(totalTravelers);
+    const gstAmount = Math.round(baseCost * 0.05);
+    const totalCost = baseCost + gstAmount;
     // Booking deposit from package (e.g. 3000) multiplied by travelers count
     const amountPaid = pkg.bookingDeposit * Number(totalTravelers);
 

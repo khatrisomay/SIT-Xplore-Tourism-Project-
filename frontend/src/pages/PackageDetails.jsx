@@ -86,7 +86,9 @@ export default function PackageDetails() {
 
   // Cost calculations
   const pricePerPerson = pkg.sharingPrices?.[sharing] || 0;
-  const totalCost = pricePerPerson * travelersCount;
+  const baseCost = pricePerPerson * travelersCount;
+  const gstAmount = Math.round(baseCost * 0.05);
+  const totalCost = baseCost + gstAmount;
   const depositRequired = (pkg.bookingDeposit || 3000) * travelersCount;
 
   const handleTravelersCountChange = (val) => {
@@ -397,17 +399,25 @@ export default function PackageDetails() {
                 />
               </div>
 
-              {/* Booking Cost Output Displays */}
+              {/* Booking Cost Output */}
               <div className="bg-[#ecebe6]/60 dark:bg-white/5 border border-[#d1cfc7] dark:border-white/5 rounded-2xl p-4 space-y-2">
                 <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
-                  <span>Total Package Cost:</span>
-                  <span className="font-outfit font-bold text-slate-850 dark:text-white">₹{totalCost.toLocaleString("en-IN")}</span>
+                  <span>Base Package Cost:</span>
+                  <span className="font-outfit font-bold text-slate-850 dark:text-white">₹{baseCost.toLocaleString("en-IN")}</span>
                 </div>
-                <div className="flex justify-between text-xs font-semibold text-brand-650 dark:text-brand-400">
+                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                  <span>GST (5%):</span>
+                  <span className="font-outfit font-bold text-slate-850 dark:text-white">₹{gstAmount.toLocaleString("en-IN")}</span>
+                </div>
+                <div className="flex justify-between text-xs font-semibold text-slate-800 dark:text-white border-t border-[#d1cfc7] dark:border-white/5 pt-2">
+                  <span>Total Package Cost (incl. GST):</span>
+                  <span className="font-outfit font-bold">₹{totalCost.toLocaleString("en-IN")}</span>
+                </div>
+                <div className="flex justify-between text-xs font-semibold text-brand-650 dark:text-brand-400 border-t border-[#d1cfc7] dark:border-white/5 pt-2">
                   <span>Booking Deposit (due now):</span>
                   <span className="font-outfit font-bold">₹{depositRequired.toLocaleString("en-IN")}</span>
                 </div>
-                <p className="text-[10px] text-gray-500 dark:text-gray-550 text-center leading-normal pt-1.5 border-t border-[#d1cfc7] dark:border-white/5">
+                <p className="text-[10px] text-gray-550 dark:text-gray-500 text-center leading-normal pt-1.5 border-t border-[#d1cfc7] dark:border-white/5">
                   Confirm your slot by paying ₹{(pkg.bookingDeposit || 3000).toLocaleString("en-IN")} per head today. Rest is paid 7 days before travel.
                 </p>
               </div>
