@@ -54,6 +54,22 @@ export const createBooking = async (req, res) => {
     if (couponCode) {
       const code = couponCode.toUpperCase().trim();
       if (coupons[code]) {
+        // Query to check if the user/email has already used this coupon code on a completed/paid booking
+        const query = {
+          couponCode: code,
+          paymentStatus: "paid",
+          $or: [
+            { customerEmail: customerEmail.toLowerCase().trim() }
+          ]
+        };
+        if (req.user) {
+          query.$or.push({ user: req.user._id });
+        }
+
+        const hasUsedCoupon = await Booking.findOne(query);
+        if (hasUsedCoupon) {
+          return res.status(400).json({ success: false, message: "This coupon code has already been used by your account." });
+        }
         discount = coupons[code];
       } else {
         return res.status(400).json({ success: false, message: "Invalid coupon code." });
