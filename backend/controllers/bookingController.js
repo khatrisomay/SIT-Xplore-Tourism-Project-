@@ -1,6 +1,7 @@
 import Booking from "../models/Booking.js";
 import Package from "../models/Package.js";
 import { v4 as uuidv4 } from "uuid";
+import { sendInvoiceEmail } from "../utils/emailService.js";
 
 export const createBooking = async (req, res) => {
   try {
@@ -87,6 +88,9 @@ export const confirmPayment = async (req, res) => {
     booking.paymentStatus = "paid";
     booking.transactionId = transactionId || `txn_mock_${Date.now()}_${Math.floor(1000 + Math.random() * 9000)}`;
     await booking.save();
+
+    // Send payment confirmation email with PDF receipt
+    sendInvoiceEmail(booking);
 
     return res.status(200).json({
       success: true,
