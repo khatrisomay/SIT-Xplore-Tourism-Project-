@@ -38,7 +38,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Links */}
-        <ul className="hidden md:flex items-center gap-8 font-outfit text-sm font-medium tracking-wide text-gray-600 dark:text-gray-300">
+        <ul className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 font-outfit text-xs lg:text-sm font-medium tracking-wide text-gray-600 dark:text-gray-300">
           <li>
             <Link to="/" className={`hover:text-brand-600 dark:hover:text-brand-400 transition-colors ${isActive("/") ? "text-brand-500 font-bold" : ""}`}>
               Home
@@ -46,17 +46,17 @@ export default function Navbar() {
           </li>
           <li>
             <Link to="/?cat=Domestic Trips" className={`hover:text-brand-600 dark:hover:text-brand-400 transition-colors ${location.search.includes("Domestic") ? "text-brand-500 font-bold" : ""}`}>
-              Domestic Trips
+              Domestic
             </Link>
           </li>
           <li>
             <Link to="/?cat=International Trips" className={`hover:text-brand-600 dark:hover:text-brand-400 transition-colors ${location.search.includes("International") ? "text-brand-500 font-bold" : ""}`}>
-              International Trips
+              International
             </Link>
           </li>
           <li>
             <Link to="/?cat=Weekend Getaways" className={`hover:text-brand-600 dark:hover:text-brand-400 transition-colors ${location.search.includes("Weekend") ? "text-brand-500 font-bold" : ""}`}>
-              Weekend Getaways
+              Weekends
             </Link>
           </li>
           <li>
@@ -66,7 +66,7 @@ export default function Navbar() {
           </li>
           <li>
             <Link to="/?cat=Vehicle Rental" className={`hover:text-brand-600 dark:hover:text-brand-400 transition-colors ${location.search.includes("Vehicle") ? "text-brand-500 font-bold" : ""}`}>
-              Vehicle Rentals
+              Rentals
             </Link>
           </li>
           <li>
@@ -77,45 +77,45 @@ export default function Navbar() {
         </ul>
 
         {/* Right side: Theme Toggle & User Actions */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-2.5 lg:gap-4">
           
           {/* Instagram Button */}
           <a
             href="https://www.instagram.com/sit_xplore/"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-full border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-650 dark:text-gray-300 hover:text-brand-650 dark:hover:text-brand-400 transition-all focus:outline-none"
+            className="p-1.5 lg:p-2 rounded-full border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-650 dark:text-gray-300 hover:text-brand-650 dark:hover:text-brand-400 transition-all focus:outline-none"
             title="Follow us on Instagram"
           >
-            <Instagram className="w-4.5 h-4.5" />
+            <Instagram className="w-4 h-4 lg:w-4.5 lg:h-4.5" />
           </a>
 
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-650 dark:text-gray-300 transition-all focus:outline-none"
+            className="p-1.5 lg:p-2 rounded-full border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-650 dark:text-gray-300 transition-all focus:outline-none"
             title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
-            {theme === "dark" ? <Sun className="w-4.5 h-4.5 text-brand-500" /> : <Moon className="w-4.5 h-4.5 text-brand-700" />}
+            {theme === "dark" ? <Sun className="w-4 h-4 lg:w-4.5 lg:h-4.5 text-brand-500" /> : <Moon className="w-4 h-4 lg:w-4.5 lg:h-4.5 text-brand-700" />}
           </button>
 
           {user ? (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2.5 lg:gap-4">
               <Link
                 to="/my-bookings"
-                className="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 dark:border-white/10 hover:border-brand-500/30 text-sm font-outfit text-gray-700 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-all bg-gray-50 dark:bg-transparent"
+                className="flex items-center gap-1.5 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full border border-gray-200 dark:border-white/10 hover:border-brand-500/30 text-xs lg:text-sm font-outfit text-gray-700 dark:text-gray-300 hover:text-brand-600 dark:hover:text-brand-400 transition-all bg-gray-50 dark:bg-transparent shrink-0"
               >
-                <Briefcase className="w-4 h-4 text-brand-500" />
+                <Briefcase className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-brand-500" />
                 <span>My Bookings</span>
               </Link>
-              <div className="flex items-center gap-2 pl-2 border-l border-gray-200 dark:border-white/10">
-                <span className="text-xs text-gray-500 dark:text-gray-400">Hi, {user.name.split(" ")[0]}</span>
+              <div className="flex items-center gap-1.5 pl-2 border-l border-gray-200 dark:border-white/10 shrink-0">
+                <span className="text-[10px] lg:text-xs text-gray-500 dark:text-gray-400">Hi, {user.name.split(" ")[0]}</span>
                 <button
                   onClick={handleLogout}
-                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 hover:text-red-500 transition-all"
+                  className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-400 hover:text-red-500 transition-all"
                   title="Logout"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <LogOut className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                 </button>
               </div>
             </div>
