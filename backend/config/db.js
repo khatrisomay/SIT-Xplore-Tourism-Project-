@@ -30,8 +30,8 @@ export const connectDB = async () => {
     // Auto-seed packages matching www.sitxplore.in plus hotel/bike rentals
     const packageCount = await Package.countDocuments({});
     
-    // Check if we need to upgrade to seed the hotel/bike rental options (needs 8 items total)
-    if (packageCount < 8) {
+    // Check if we need to upgrade to seed new packages (needs 9 items total)
+    if (packageCount < 9) {
       // Clear legacy placeholders
       await Package.deleteMany({});
       
@@ -310,6 +310,44 @@ export const connectDB = async () => {
             { day: 2, title: "Return Handover & Deposit Refund", description: "Bring back the bike within 24 hours with basic checks. Collect your security deposit refund after mechanical inspection." }
           ],
           slots: ["Daily Booking Available"]
+        },
+        {
+          title: "Thailand (Phuket + Krabi) Paradise Tour",
+          category: "International Trips",
+          duration: "5N/6D",
+          description: "Explore the tropical paradise of Thailand with our Phuket and Krabi twin-destination tour. Settle in premium hotels, relax on white sand beaches, ride speedboats across iconic limestone islands, and enjoy seamless airport transfers.",
+          bannerImage: "https://images.unsplash.com/photo-1528181304800-2f1908c39522?q=80&w=1200&auto=format&fit=crop",
+          galleryImages: [],
+          sharingPrices: {
+            doubleSharing: 29000,
+            tripleSharing: 27000,
+            quadSharing: 25000,
+          },
+          bookingDeposit: 5000,
+          inclusions: [
+            "3 Nights 3-star Hotel Stay in Phuket",
+            "2 Nights 3-star Hotel Stay in Krabi",
+            "Daily Buffet Breakfast",
+            "Airport Pickup & Drop transfers (HKT/KBV)",
+            "Phi Phi Island tour by Speedboat with Lunch",
+            "Four Island tour in Krabi by Longtail boat",
+            "Local English-speaking tour guide support"
+          ],
+          exclusions: [
+            "International flight tickets (Delhi/Mumbai to Phuket)",
+            "Thailand tourist visa fees (if applicable)",
+            "Lunches and dinners not mentioned in inclusions",
+            "Personal tipping, shopping, and laundry"
+          ],
+          itinerary: [
+            { day: 1, title: "Phuket Airport Pickup & Hotel Check-in", description: "Arrive at Phuket International Airport, meet our representative, and transfer to Patong Beach hotel. Rest or visit Mall Road and Bangla Street in the evening." },
+            { day: 2, title: "Phi Phi Island speedboat day tour", description: "Depart for Phi Phi Ley and Phi Phi Don. Swim at Maya Bay, snorkel in Pileh Lagoon, see Monkey Beach, and enjoy a buffet lunch." },
+            { day: 3, title: "Phuket City Sightseeing & Viewpoints", description: "Explore Big Buddha, Wat Chalong Temple, and Karon viewpoint. Spend the sunset at Promthep Cape." },
+            { day: 4, title: "Phuket to Krabi transfer & local exploration", description: "Drive along the scenic coast to Krabi. Check-in to Ao Nang beach resort. Relax in local street cafes." },
+            { day: 5, title: "Krabi 4-Island boat cruise tour", description: "Ride a boat to Railay Beach, Phra Nang Cave, Tup Island, and Chicken Island. Enjoy swimming in emerald waters." },
+            { day: 6, title: "Krabi Hotel check-out & Airport Drop", description: "Enjoy breakfast, check out of your hotel, and transfer to Krabi Airport for your flight back home." }
+          ],
+          slots: ["2026-09-05", "2026-09-19", "2026-10-03"]
         }
       ];
       await Package.insertMany(defaultPackages);
