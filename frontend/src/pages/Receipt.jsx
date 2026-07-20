@@ -126,8 +126,27 @@ export default function Receipt() {
   });
 
   return (
-    <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300">
-      <Navbar />
+    <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300 print:bg-white print:text-black">
+      
+      {/* Print color adjustment overrides */}
+      <style>{`
+        @media print {
+          body, html, #root {
+            background-color: white !important;
+            background: white !important;
+            color: black !important;
+          }
+          .print-exact {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+        }
+      `}</style>
+
+      <div className="print:hidden">
+        <Navbar />
+      </div>
 
       <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-12 space-y-8 print:py-0 print:px-0">
         
@@ -155,7 +174,7 @@ export default function Receipt() {
         <article className="rounded-3xl bg-white text-slate-800 border border-gray-250 shadow-2xl relative overflow-hidden print:border-none print:shadow-none transition-colors duration-300">
           
           {/* Header Curved Banner */}
-          <div className="relative bg-[#072113] text-white p-6 pb-8 overflow-hidden flex flex-col sm:flex-row justify-between items-center border-b-4 border-[#e0a816]">
+          <div className="relative bg-[#072113] text-white p-6 pb-8 overflow-hidden flex flex-col sm:flex-row justify-between items-center border-b-4 border-[#e0a816] print-exact">
             
             {/* Decorative yellow wave accent background */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#e0a816] rounded-bl-full opacity-10 pointer-events-none" />
@@ -206,7 +225,7 @@ export default function Receipt() {
             <div className="space-y-4 md:pl-6 md:border-l border-gray-150 flex flex-col justify-between">
               <div className="flex justify-between items-center">
                 <h2 className="text-3xl font-outfit font-extrabold text-slate-800 tracking-wider">INVOICE</h2>
-                <div className="px-4 py-1.5 bg-[#072113] rounded text-[#e0a816] font-outfit font-extrabold text-sm shadow">
+                <div className="px-4 py-1.5 bg-[#072113] rounded text-[#e0a816] font-outfit font-extrabold text-sm shadow print-exact">
                   INVOICE NO. : {invoiceNumStr}
                 </div>
               </div>
@@ -225,7 +244,7 @@ export default function Receipt() {
 
           {/* Customer Details */}
           <div className="px-6 py-4 space-y-3">
-            <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816]">
+            <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816] print-exact">
               Customer Details
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 rounded-2xl p-4 bg-[#fcfbfa]">
@@ -241,7 +260,7 @@ export default function Receipt() {
 
           {/* Travel Details */}
           <div className="px-6 py-4 space-y-3">
-            <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816]">
+            <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816] print-exact">
               Travel Details
             </div>
             <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-sm bg-white">
@@ -282,7 +301,7 @@ export default function Receipt() {
           </div>
 
           {/* Pricing calculations Block */}
-          <div className="mx-6 my-4 bg-[#072113] text-white rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816]">
+          <div className="mx-6 my-4 bg-[#072113] text-white rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816] print-exact">
             <div>
               <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block">TOTAL AMOUNT</span>
               <span className="text-3xl font-outfit font-extrabold text-[#e0a816]">₹ {booking.totalCost?.toLocaleString("en-IN")}</span>
@@ -303,7 +322,7 @@ export default function Receipt() {
             {/* Payment Status Check */}
             <div className="space-y-1">
               <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">PAYMENT STATUS</span>
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-500/10 border border-green-500/20 text-green-600 text-[10px] font-extrabold tracking-widest rounded-full uppercase">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-500/10 border border-green-500/20 text-green-600 text-[10px] font-extrabold tracking-widest rounded-full uppercase print-exact">
                 ✓ PAID
               </span>
             </div>
@@ -322,7 +341,7 @@ export default function Receipt() {
           </div>
 
           {/* Footer banner strip */}
-          <div className="bg-[#072113] text-white p-4 rounded-b-3xl flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] font-outfit font-semibold tracking-wider uppercase border-t-2 border-[#e0a816]/20">
+          <div className="bg-[#072113] text-white p-4 rounded-b-3xl flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] font-outfit font-semibold tracking-wider uppercase border-t-2 border-[#e0a816]/20 print-exact">
             <div className="flex items-center gap-2">
               <Shield className="w-3.5 h-3.5 text-[#e0a816]" />
               <span><strong>24x7 TRAVEL SUPPORT</strong> | TRUSTED • SAFE • MEMORABLE</span>
@@ -358,7 +377,9 @@ export default function Receipt() {
         </div>
 
       </main>
-      <Footer />
+      <div className="print:hidden">
+        <Footer />
+      </div>
     </div>
   );
 }
