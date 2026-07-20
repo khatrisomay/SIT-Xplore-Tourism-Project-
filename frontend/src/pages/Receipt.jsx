@@ -1,9 +1,61 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { Check, Printer, ChevronRight, MapPin, Calendar, Users, FileText } from "lucide-react";
+import { 
+  Check, Printer, ChevronRight, MapPin, Calendar, Users, FileText,
+  Mail, Phone, Globe, Shield, CreditCard, Sparkles, User, BedSingle
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+
+// Helper function to convert numeric currency to Indian English Words
+function numberToWords(num) {
+  const a = [
+    "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+    "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+  ];
+  const b = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  
+  if (num === 0) return "Zero";
+
+  const convertLessThanThousand = (n) => {
+    if (n < 20) return a[n];
+    const digit = n % 10;
+    if (n < 100) return b[Math.floor(n / 10)] + (digit ? " " + a[digit] : "");
+    return a[Math.floor(n / 100)] + " Hundred" + (n % 100 === 0 ? "" : " and " + convertLessThanThousand(n % 100));
+  };
+
+  let wordList = [];
+  let temp = num;
+
+  let hundred = temp % 1000;
+  if (hundred > 0) {
+    wordList.push(convertLessThanThousand(hundred));
+  }
+  temp = Math.floor(temp / 1000);
+
+  if (temp > 0) {
+    let thousand = temp % 100;
+    if (thousand > 0) {
+      wordList.unshift(convertLessThanThousand(thousand) + " Thousand");
+    }
+    temp = Math.floor(temp / 100);
+  }
+
+  if (temp > 0) {
+    let lakh = temp % 100;
+    if (lakh > 0) {
+      wordList.unshift(convertLessThanThousand(lakh) + " Lakh");
+    }
+    temp = Math.floor(temp / 100);
+  }
+
+  if (temp > 0) {
+    wordList.unshift(convertLessThanThousand(temp) + " Crore");
+  }
+
+  return wordList.join(" ") + " Only";
+}
 
 export default function Receipt() {
   const { id } = useParams();
@@ -42,7 +94,7 @@ export default function Receipt() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-[#0b0c10] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] flex flex-col justify-between transition-colors">
         <Navbar />
         <div className="flex-grow flex items-center justify-center">
           <div className="w-8 h-8 rounded-full border-2 border-brand-500/20 border-t-brand-500 animate-spin" />
@@ -54,7 +106,7 @@ export default function Receipt() {
 
   if (error || !booking) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-[#0b0c10] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] flex flex-col justify-between transition-colors">
         <Navbar />
         <div className="flex-grow flex flex-col items-center justify-center space-y-4">
           <p className="text-red-500 dark:text-red-400 font-outfit">{error || "Invoice not found."}</p>
@@ -66,9 +118,15 @@ export default function Receipt() {
   }
 
   const remainingBalance = booking.totalCost - booking.amountPaid;
+  const invoiceNumStr = booking.bookingId.slice(-4).toUpperCase();
+  const formattedDate = new Date(booking.createdAt).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300">
+    <div className="min-h-screen bg-[#ecebe6] dark:bg-[#0b0c10] text-slate-800 dark:text-[#e7e7e7] flex flex-col transition-colors duration-300">
       <Navbar />
 
       <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-12 space-y-8 print:py-0 print:px-0">
@@ -94,83 +152,189 @@ export default function Receipt() {
         </div>
 
         {/* Main Printable Ticket Card */}
-        <article className="rounded-3xl bg-white dark:bg-[#111318] border border-gray-250 dark:border-white/5 p-8 shadow-2xl relative overflow-hidden print:bg-white print:text-black print:border-none print:shadow-none transition-colors duration-300">
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-brand-500 print:hidden" />
-
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row justify-between gap-6 border-b border-gray-200 dark:border-white/5 pb-6 print:border-black/10">
-            <div className="space-y-1.5">
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-extrabold print:text-gray-600">Travel Ticket & Invoice</span>
-              <h2 className="font-outfit font-extrabold text-2xl text-slate-900 dark:text-white print:text-black">{booking.package?.title}</h2>
-              <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400 print:text-gray-700">
-                <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-brand-500" /> {booking.package?.category}</span>
-                <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-brand-500" /> {booking.travelDate}</span>
-              </div>
-            </div>
-
-            {/* QR code wrapper */}
-            <div className="shrink-0 flex flex-col items-center sm:items-end gap-1">
-              <div className="p-2.5 bg-white rounded-xl border border-gray-200 dark:border-white/10 shrink-0 shadow-sm">
-                <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${booking.bookingId}`}
-                  alt="Booking QR Code"
-                  className="w-24 h-24 object-contain"
-                />
-              </div>
-              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mt-1.5">Booking ID: {booking.bookingId}</span>
-            </div>
-          </div>
-
-          {/* Grid specifications */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 py-6 border-b border-gray-200 dark:border-white/5 print:border-black/10">
+        <article className="rounded-3xl bg-white text-slate-800 border border-gray-250 shadow-2xl relative overflow-hidden print:border-none print:shadow-none transition-colors duration-300">
+          
+          {/* Header Curved Banner */}
+          <div className="relative bg-[#072113] text-white p-6 pb-8 overflow-hidden flex flex-col sm:flex-row justify-between items-center border-b-4 border-[#e0a816]">
             
-            {/* Primary traveler info */}
-            <div className="space-y-4">
-              <h4 className="font-outfit font-bold text-xs uppercase tracking-wider text-brand-600 dark:text-brand-400">Traveler Details</h4>
-              <ul className="space-y-2 text-xs text-slate-700 dark:text-gray-300 print:text-gray-800">
-                <li><strong className="text-gray-550 dark:text-gray-500 print:text-gray-600 block">Lead Traveler:</strong> {booking.customerName}</li>
-                <li><strong className="text-gray-550 dark:text-gray-500 print:text-gray-600 block">Phone Number:</strong> {booking.customerPhone}</li>
-                <li><strong className="text-gray-550 dark:text-gray-500 print:text-gray-600 block">Email Address:</strong> {booking.customerEmail}</li>
-              </ul>
+            {/* Decorative yellow wave accent background */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#e0a816] rounded-bl-full opacity-10 pointer-events-none" />
+
+            <div className="flex items-center gap-3 relative z-10">
+              <img
+                src="/sit xplore new logo.png"
+                alt="SIT Xplore Logo"
+                className="w-14 h-14 object-cover rounded-full border-2 border-white/20"
+              />
+              <div>
+                <span className="font-outfit font-extrabold text-2xl tracking-wider text-white">
+                  SIT <span className="text-[#e0a816]">XPLORE</span>
+                </span>
+                <p className="text-[10px] text-gray-300 tracking-widest uppercase font-outfit">EXPLORE MORE, WORRY LESS</p>
+              </div>
             </div>
 
-            {/* Tour configuration specs */}
-            <div className="space-y-4">
-              <h4 className="font-outfit font-bold text-xs uppercase tracking-wider text-brand-600 dark:text-brand-400">Trip Configuration</h4>
-              <ul className="space-y-2 text-xs text-slate-700 dark:text-gray-300 print:text-gray-800">
-                <li><strong className="text-gray-550 dark:text-gray-500 print:text-gray-600 block">Sharing Choice:</strong> <span className="capitalize">{booking.sharingSelected?.replace("Sharing", " Sharing")}</span></li>
-                <li><strong className="text-gray-550 dark:text-gray-500 print:text-gray-600 block">Travelers Count:</strong> {booking.totalTravelers} Traveler(s)</li>
-                {booking.travelersList?.length > 0 && (
-                  <li>
-                    <strong className="text-gray-550 dark:text-gray-500 print:text-gray-600 block">Additional Travelers:</strong>
-                    {booking.travelersList.join(", ")}
-                  </li>
-                )}
-              </ul>
+            {/* Google review and served stats */}
+            <div className="mt-4 sm:mt-0 text-[9px] font-outfit font-bold uppercase tracking-wider space-y-1 text-center sm:text-right relative z-10">
+              <div className="flex items-center justify-center sm:justify-end gap-1">
+                <span>🛡️</span> 50K+ TRIPS SERVED
+              </div>
+              <div className="flex items-center justify-center sm:justify-end gap-1">
+                <span>👥</span> 70,000+ HAPPY TRAVELERS
+              </div>
+              <div className="flex items-center justify-center sm:justify-end gap-1 text-[#e0a816]">
+                <span>★</span> 5★ GOOGLE REVIEWS
+              </div>
             </div>
-
           </div>
 
-          {/* Pricing calculations */}
-          <div className="py-6 space-y-4">
-            <h4 className="font-outfit font-bold text-xs uppercase tracking-wider text-brand-600 dark:text-brand-400">Payment Breakdown</h4>
-            <div className="border border-gray-200 dark:border-white/5 rounded-2xl p-5 bg-slate-50 dark:bg-[#111318]/40 space-y-3 text-xs print:border-black/10 print:text-black">
-              <div className="flex justify-between">
-                <span className="text-gray-500 print:text-gray-600">Total Booking Value:</span>
-                <span className="font-bold text-slate-800 dark:text-white print:text-black">₹{booking.totalCost?.toLocaleString("en-IN")}</span>
-              </div>
-              <div className="flex justify-between text-green-600 dark:text-green-400 font-semibold border-b border-gray-200 dark:border-white/5 pb-3 print:text-green-600 print:border-black/10">
-                <span>Paid Deposit Amount (Stripe Mocked):</span>
-                <span>₹{booking.amountPaid?.toLocaleString("en-IN")}</span>
-              </div>
-              <div className="flex justify-between text-sm font-semibold pt-1">
-                <span className="text-brand-650 dark:text-brand-400">Remaining Balance:</span>
-                <span className="font-outfit font-extrabold text-slate-900 dark:text-white print:text-black">₹{remainingBalance?.toLocaleString("en-IN")}</span>
+          {/* Company Details & Invoice Metadata */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 border-b border-gray-150">
+            {/* Company Info */}
+            <div className="space-y-1 text-xs text-slate-600">
+              <h3 className="font-outfit font-extrabold text-sm text-[#072113]">SIT XPLORE</h3>
+              <p className="text-[10px] text-gray-400 font-medium">(Sterling International Travel and Xplore)</p>
+              <div className="space-y-1 pt-2 font-medium">
+                <p className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 text-[#e0a816] shrink-0" /> <span><strong>Head Office:</strong> Sonipat, Haryana</span></p>
+                <p className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-[#e0a816] shrink-0" /> <span><strong>Email:</strong> booking@sitxplore.in</span></p>
+                <p className="flex items-center gap-2"><Globe className="w-3.5 h-3.5 text-[#e0a816] shrink-0" /> <span><strong>Website:</strong> www.sitxplore.in</span></p>
+                <p className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-[#e0a816] shrink-0" /> <span><strong>Contact:</strong> 9050553507, 7027878371</span></p>
               </div>
             </div>
-            <p className="text-[10px] text-gray-550 dark:text-gray-500 text-center leading-normal pt-2">
-              Note: The remaining balance is payable directly to SIT Xplore coordinators 7 days before departure. Transaction ID: {booking.transactionId}.
-            </p>
+
+            {/* Invoice Info */}
+            <div className="space-y-4 md:pl-6 md:border-l border-gray-150 flex flex-col justify-between">
+              <div className="flex justify-between items-center">
+                <h2 className="text-3xl font-outfit font-extrabold text-slate-800 tracking-wider">INVOICE</h2>
+                <div className="px-4 py-1.5 bg-[#072113] rounded text-[#e0a816] font-outfit font-extrabold text-sm shadow">
+                  INVOICE NO. : {invoiceNumStr}
+                </div>
+              </div>
+              <div className="space-y-1.5 text-xs text-slate-600 font-medium">
+                <p className="flex justify-between border-b border-gray-100 pb-1">
+                  <span className="text-gray-400">INVOICE DATE :</span> 
+                  <strong className="text-slate-800">{formattedDate}</strong>
+                </p>
+                <p className="flex justify-between border-b border-gray-100 pb-1">
+                  <span className="text-gray-400">BOOKING DATE :</span> 
+                  <strong className="text-slate-800">{formattedDate}</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Customer Details */}
+          <div className="px-6 py-4 space-y-3">
+            <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816]">
+              Customer Details
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border border-gray-200 rounded-2xl p-4 bg-[#fcfbfa]">
+              <div className="space-y-2 text-xs text-slate-700">
+                <p className="flex items-center gap-2"><User className="w-3.5 h-3.5 text-gray-400" /> <span><strong>NAME:</strong> {booking.customerName}</span></p>
+                <p className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-gray-400" /> <span><strong>EMAIL ID:</strong> {booking.customerEmail}</span></p>
+              </div>
+              <div className="space-y-2 text-xs text-slate-700 md:border-l border-gray-200 md:pl-4">
+                <p className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-gray-400" /> <span><strong>MOBILE NO:</strong> {booking.customerPhone}</span></p>
+              </div>
+            </div>
+          </div>
+
+          {/* Travel Details */}
+          <div className="px-6 py-4 space-y-3">
+            <div className="inline-block bg-[#072113] text-white text-[10px] font-bold tracking-wider uppercase px-4 py-1.5 rounded skew-x-[-10deg] border-l-2 border-[#e0a816]">
+              Travel Details
+            </div>
+            <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-sm bg-white">
+              <table className="w-full text-left text-xs border-collapse">
+                <tbody className="divide-y divide-gray-150 text-slate-700">
+                  <tr className="hover:bg-gray-50/50">
+                    <td className="p-3 font-bold w-1/3 flex items-center gap-2 text-gray-500"><Calendar className="w-3.5 h-3.5" /> TRAVEL DATE</td>
+                    <td className="p-3 w-6 text-center">:</td>
+                    <td className="p-3 font-medium text-slate-800">{booking.travelDate}</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50/50">
+                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><User className="w-3.5 h-3.5" /> TRAVEL TYPE</td>
+                    <td className="p-3 text-center">:</td>
+                    <td className="p-3 font-medium text-slate-800">
+                      {booking.totalTravelers === 1 ? "Solo Travel (1 Pax)" : `Group Travel (${booking.totalTravelers} Pax)`}
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50/50">
+                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><BedSingle className="w-3.5 h-3.5" /> ROOM SHARING</td>
+                    <td className="p-3 text-center">:</td>
+                    <td className="p-3 font-medium text-slate-800 capitalize">
+                      {booking.sharingSelected?.replace("Sharing", " Sharing")}
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-gray-50/50">
+                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><MapPin className="w-3.5 h-3.5" /> ROUTE</td>
+                    <td className="p-3 text-center">:</td>
+                    <td className="p-3 font-medium text-slate-800">{booking.package?.title}</td>
+                  </tr>
+                  <tr className="hover:bg-gray-50/50">
+                    <td className="p-3 font-bold flex items-center gap-2 text-gray-500"><CreditCard className="w-3.5 h-3.5" /> PACKAGE RATE</td>
+                    <td className="p-3 text-center">:</td>
+                    <td className="p-3 font-extrabold text-slate-900 text-sm">₹ {booking.totalCost?.toLocaleString("en-IN")}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Pricing calculations Block */}
+          <div className="mx-6 my-4 bg-[#072113] text-white rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-center gap-4 border-l-4 border-[#e0a816]">
+            <div>
+              <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block">TOTAL AMOUNT</span>
+              <span className="text-3xl font-outfit font-extrabold text-[#e0a816]">₹ {booking.totalCost?.toLocaleString("en-IN")}</span>
+            </div>
+            <div className="flex items-center gap-3 sm:border-l border-white/10 sm:pl-6 w-full sm:w-auto">
+              <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white shrink-0">
+                <FileText className="w-5 h-5 text-[#e0a816]" />
+              </div>
+              <div>
+                <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">AMOUNT (IN WORDS)</span>
+                <span className="text-xs font-semibold text-white">{numberToWords(booking.totalCost)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Terms and Signatures */}
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-6 items-center border-t border-gray-100">
+            {/* Payment Status Check */}
+            <div className="space-y-1">
+              <span className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block">PAYMENT STATUS</span>
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-500/10 border border-green-500/20 text-green-600 text-[10px] font-extrabold tracking-widest rounded-full uppercase">
+                ✓ PAID
+              </span>
+            </div>
+
+            {/* Booking Terms details */}
+            <div className="text-[10px] text-slate-500 leading-normal font-medium">
+              <strong className="text-slate-800 block text-[11px] mb-0.5">PAYMENT TERMS:</strong>
+              50% Advance & 50% Remaining at the Time of Boarding.
+            </div>
+
+            {/* Signature Thank you block */}
+            <div className="text-center sm:text-right font-outfit text-xs text-slate-500 sm:border-l border-gray-150 pt-4 sm:pt-0 sm:pl-6 space-y-1">
+              <p className="italic font-bold text-slate-800 text-sm">Thank You!</p>
+              <p className="text-[10px]">For Choosing <span className="font-extrabold text-[#072113]">SIT <span className="text-[#e0a816]">XPLORE</span></span></p>
+            </div>
+          </div>
+
+          {/* Footer banner strip */}
+          <div className="bg-[#072113] text-white p-4 rounded-b-3xl flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] font-outfit font-semibold tracking-wider uppercase border-t-2 border-[#e0a816]/20">
+            <div className="flex items-center gap-2">
+              <Shield className="w-3.5 h-3.5 text-[#e0a816]" />
+              <span><strong>24x7 TRAVEL SUPPORT</strong> | TRUSTED • SAFE • MEMORABLE</span>
+            </div>
+            <div className="flex items-center gap-3 text-[9px]">
+              <span>FOLLOW US:</span>
+              <a href="https://www.instagram.com/sit_xplore/" target="_blank" rel="noopener noreferrer" className="text-[#e0a816] hover:underline">Instagram</a>
+              <span>•</span>
+              <span className="text-gray-400">Facebook</span>
+              <span>•</span>
+              <span className="text-gray-400">YouTube</span>
+            </div>
           </div>
 
         </article>
