@@ -76,13 +76,13 @@ graph TD
     RenderCI -->|Deploys| API
 ```
 
-### 🔮 Future Enterprise Infrastructure Roadmap (Planned)
-As the platform scales, the infrastructure will be migrated to a fully containerized, enterprise-grade Kubernetes environment:
+### 🏗️ Enterprise Infrastructure & DevOps
+The platform's infrastructure is built on a fully containerized, enterprise-grade environment:
 
 - **Dockerization:** Containerization of the Frontend, Admin, and Backend services into isolated Docker containers for consistent development and production environments.
 - **Kubernetes (K8s):** Orchestration of Docker containers across a highly available cluster to ensure zero downtime, automated scaling, and self-healing.
 - **Jenkins CI/CD:** Implementation of Jenkins pipelines for rigorous automated testing, security scanning, and deployment orchestration to Kubernetes.
-- **Terraform:** Infrastructure as Code (IaC) to programmatically provision and manage cloud resources (VPCs, Load Balancers, K8s clusters) predictably and reliably.
+- **Terraform:** Infrastructure as Code (IaC) programmatically provisioning and managing cloud resources (VPCs, Load Balancers, K8s clusters) predictably and reliably.
 
 ## 💻 Local Development Setup
 
