@@ -1,20 +1,4 @@
 import Package from "../models/Package.js";
-import fs from "fs";
-import path from "path";
-
-// Helper to remove files if creation fails or package is deleted
-const deleteFileSafe = (relativeUrl) => {
-  if (!relativeUrl) return;
-  try {
-    const filename = relativeUrl.replace("/uploads/", "");
-    const absolutePath = path.join(process.cwd(), "uploads", filename);
-    if (fs.existsSync(absolutePath)) {
-      fs.unlinkSync(absolutePath);
-    }
-  } catch (err) {
-    console.error("Failed to delete file:", relativeUrl, err);
-  }
-};
 
 export const getPackages = async (req, res) => {
   try {
@@ -51,30 +35,18 @@ export const createPackage = async (req, res) => {
       category,
       duration,
       description,
-      sharingPrices, // JSON string
+      sharingPrices, // JSON object or string
       bookingDeposit,
-      inclusions, // JSON string or comma-separated
-      exclusions, // JSON string or comma-separated
-      itinerary, // JSON string
-      slots, // JSON string or comma-separated
+      inclusions, // Array or string
+      exclusions, // Array or string
+      itinerary, // Array or string
+      slots, // Array or string
+      bannerImage, // String URL
+      galleryImages, // Array of String URLs
     } = req.body;
 
-    if (!title || !category || !duration) {
-      return res.status(400).json({ success: false, message: "Please fill in all required text fields." });
-    }
-
-    if (!req.files || !req.files["bannerImage"]) {
-      return res.status(400).json({ success: false, message: "Please upload a cover banner image." });
-    }
-
-    const bannerFile = req.files["bannerImage"][0];
-    const bannerUrl = `/uploads/${bannerFile.filename}`;
-
-    const galleryUrls = [];
-    if (req.files["galleryImages"]) {
-      req.files["galleryImages"].forEach((file) => {
-        galleryUrls.push(`/uploads/${file.filename}`);
-      });
+    if (!title || !category || !duration || !bannerImage) {
+      return res.status(400).json({ success: false, message: "Please fill in all required fields and provide a banner image URL." });
     }
 
     // Parsers
@@ -103,13 +75,18 @@ export const createPackage = async (req, res) => {
       parsedSlots = typeof slots === "string" ? JSON.parse(slots) : slots;
     }
 
+    let parsedGallery = [];
+    if (galleryImages) {
+      parsedGallery = typeof galleryImages === "string" ? JSON.parse(galleryImages) : galleryImages;
+    }
+
     const newPackage = await Package.create({
       title,
       category,
       duration,
       description: description || "",
-      bannerImage: bannerUrl,
-      galleryImages: galleryUrls,
+      bannerImage,
+      galleryImages: parsedGallery,
       sharingPrices: parsedSharingPrices,
       bookingDeposit: Number(bookingDeposit) || 3000,
       inclusions: parsedInclusions,
@@ -121,13 +98,6 @@ export const createPackage = async (req, res) => {
     return res.status(201).json({ success: true, message: "Package created successfully", package: newPackage });
   } catch (error) {
     console.error("createPackage error:", error);
-    // Cleanup uploaded files
-    if (req.files) {
-      if (req.files["bannerImage"]) deleteFileSafe(`/uploads/${req.files["bannerImage"][0].filename}`);
-      if (req.files["galleryImages"]) {
-        req.files["galleryImages"].forEach((file) => deleteFileSafe(`/uploads/${file.filename}`));
-      }
-    }
     return res.status(500).json({ success: false, message: "Failed to create package. Check parsing error." });
   }
 };
@@ -151,7 +121,8 @@ export const updatePackage = async (req, res) => {
       exclusions,
       itinerary,
       slots,
-      existingGalleryImages // JSON array of gallery image URLs that were not replaced/deleted
+      bannerImage,
+      galleryImages
     } = req.body;
 
     const updateData = {};
@@ -160,6 +131,7 @@ export const updatePackage = async (req, res) => {
     if (duration) updateData.duration = duration;
     if (description !== undefined) updateData.description = description;
     if (bookingDeposit) updateData.bookingDeposit = Number(bookingDeposit);
+    if (bannerImage) updateData.bannerImage = bannerImage;
 
     if (sharingPrices) {
       updateData.sharingPrices = typeof sharingPrices === "string" ? JSON.parse(sharingPrices) : sharingPrices;
@@ -176,33 +148,9 @@ export const updatePackage = async (req, res) => {
     if (slots) {
       updateData.slots = typeof slots === "string" ? JSON.parse(slots) : slots;
     }
-
-    // File Upload updates
-    if (req.files && req.files["bannerImage"]) {
-      // delete old banner file
-      deleteFileSafe(pkg.bannerImage);
-      updateData.bannerImage = `/uploads/${req.files["bannerImage"][0].filename}`;
+    if (galleryImages) {
+      updateData.galleryImages = typeof galleryImages === "string" ? JSON.parse(galleryImages) : galleryImages;
     }
-
-    let keptGallery = [];
-    if (existingGalleryImages) {
-      keptGallery = typeof existingGalleryImages === "string" ? JSON.parse(existingGalleryImages) : existingGalleryImages;
-    } else {
-      keptGallery = pkg.galleryImages; // default keep all if not explicitly specified
-    }
-
-    // Detect deleted images from gallery and delete them from disk
-    const deletedImages = pkg.galleryImages.filter(img => !keptGallery.includes(img));
-    deletedImages.forEach(img => deleteFileSafe(img));
-
-    const newGalleryFiles = [];
-    if (req.files && req.files["galleryImages"]) {
-      req.files["galleryImages"].forEach((file) => {
-        newGalleryFiles.push(`/uploads/${file.filename}`);
-      });
-    }
-
-    updateData.galleryImages = [...keptGallery, ...newGalleryFiles];
 
     const updatedPkg = await Package.findByIdAndUpdate(pkgId, updateData, { new: true });
     return res.status(200).json({ success: true, message: "Package updated successfully", package: updatedPkg });
@@ -219,12 +167,8 @@ export const deletePackage = async (req, res) => {
       return res.status(404).json({ success: false, message: "Package not found." });
     }
 
-    // Delete files from storage
-    deleteFileSafe(pkg.bannerImage);
-    pkg.galleryImages.forEach((img) => deleteFileSafe(img));
-
     await Package.findByIdAndDelete(req.params.id);
-    return res.status(200).json({ success: true, message: "Package and associated images deleted successfully" });
+    return res.status(200).json({ success: true, message: "Package deleted successfully" });
   } catch (error) {
     console.error("deletePackage error:", error);
     return res.status(500).json({ success: false, message: "Error deleting package." });

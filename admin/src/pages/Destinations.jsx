@@ -26,11 +26,9 @@ export default function Destinations() {
   const [exclusionsInput, setExclusionsInput] = useState("");
   const [slotsInput, setSlotsInput] = useState("");
 
-  // File Upload states
-  const [bannerFile, setBannerFile] = useState(null);
-  const [bannerPreview, setBannerPreview] = useState("");
-  const [galleryFiles, setGalleryFiles] = useState([]);
-  const [existingGallery, setExistingGallery] = useState([]); // kept gallery URLs when editing
+  // Image URL states
+  const [bannerImage, setBannerImage] = useState("");
+  const [galleryImages, setGalleryImages] = useState("");
 
   // Itinerary Builder state (array of objects: { day: Number, title: String, description: String })
   const [itinerary, setItinerary] = useState([{ day: 1, title: "", description: "" }]);
@@ -66,10 +64,8 @@ export default function Destinations() {
     setInclusionsInput("");
     setExclusionsInput("");
     setSlotsInput("");
-    setBannerFile(null);
-    setBannerPreview("");
-    setGalleryFiles([]);
-    setExistingGallery([]);
+    setBannerImage("");
+    setGalleryImages("");
     setItinerary([{ day: 1, title: "", description: "" }]);
     setEditingId(null);
     setShowForm(false);
@@ -96,22 +92,7 @@ export default function Destinations() {
     );
   };
 
-  // Uploader helper to read files for local previews
-  const handleBannerChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setBannerFile(file);
-      const reader = new FileReader();
-      reader.onload = () => setBannerPreview(reader.result);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleGalleryChange = (e) => {
-    if (e.target.files) {
-      setGalleryFiles(Array.from(e.target.files));
-    }
-  };
+  // Uploader helpers removed as we use direct URLs now
 
   // Triggers when edit button is clicked on package
   const handleEditClick = (pkg) => {
@@ -127,8 +108,8 @@ export default function Destinations() {
     setInclusionsInput(pkg.inclusions?.join("\n") || "");
     setExclusionsInput(pkg.exclusions?.join("\n") || "");
     setSlotsInput(pkg.slots?.join(", ") || "");
-    setBannerPreview(pkg.bannerImage);
-    setExistingGallery(pkg.galleryImages || []);
+    setBannerImage(pkg.bannerImage || "");
+    setGalleryImages(pkg.galleryImages?.join("\n") || "");
     setItinerary(pkg.itinerary?.length > 0 ? pkg.itinerary : [{ day: 1, title: "", description: "" }]);
     setShowForm(true);
   };
@@ -156,62 +137,41 @@ export default function Destinations() {
       toast.error("Please fill in basic package text details.");
       return;
     }
-    if (!editingId && !bannerFile) {
-      toast.error("Please upload a banner cover photo.");
+    if (!editingId && !bannerImage) {
+      toast.error("Please provide a banner cover image URL.");
       return;
     }
 
-    const form = new FormData();
-    form.append("title", title);
-    form.append("category", category);
-    form.append("duration", duration);
-    form.append("description", description);
-    form.append(
-      "sharingPrices",
-      JSON.stringify({
+    const payload = {
+      title,
+      category,
+      duration,
+      description,
+      sharingPrices: {
         doubleSharing: Number(doubleSharing) || 0,
         tripleSharing: Number(tripleSharing) || 0,
         quadSharing: Number(quadSharing) || 0,
-      })
-    );
-    form.append("bookingDeposit", String(bookingDeposit));
-    form.append(
-      "inclusions",
-      JSON.stringify(inclusionsInput.split("\n").map(str => str.trim()).filter(Boolean))
-    );
-    form.append(
-      "exclusions",
-      JSON.stringify(exclusionsInput.split("\n").map(str => str.trim()).filter(Boolean))
-    );
-    form.append(
-      "slots",
-      JSON.stringify(slotsInput.split(",").map(str => str.trim()).filter(Boolean))
-    );
-    form.append("itinerary", JSON.stringify(itinerary));
-
-    if (bannerFile) {
-      form.append("bannerImage", bannerFile);
-    }
-    
-    galleryFiles.forEach((file) => {
-      form.append("galleryImages", file);
-    });
-
-    if (editingId) {
-      form.append("existingGalleryImages", JSON.stringify(existingGallery));
-    }
+      },
+      bookingDeposit: Number(bookingDeposit),
+      inclusions: inclusionsInput.split("\n").map(str => str.trim()).filter(Boolean),
+      exclusions: exclusionsInput.split("\n").map(str => str.trim()).filter(Boolean),
+      slots: slotsInput.split(",").map(str => str.trim()).filter(Boolean),
+      itinerary,
+      bannerImage: bannerImage.trim(),
+      galleryImages: galleryImages.split("\n").map(str => str.trim()).filter(Boolean)
+    };
 
     try {
       let res;
       if (editingId) {
         // Edit update call
-        res = await axios.put(`/api/packages/${editingId}`, form, {
-          headers: { "Content-Type": "multipart/form-data" },
+        res = await axios.put(`/api/packages/${editingId}`, payload, {
+          headers: { "Content-Type": "application/json" },
         });
       } else {
         // Add create call
-        res = await axios.post("/api/packages", form, {
-          headers: { "Content-Type": "multipart/form-data" },
+        res = await axios.post("/api/packages", payload, {
+          headers: { "Content-Type": "application/json" },
         });
       }
 
@@ -398,23 +358,24 @@ export default function Destinations() {
                 {/* Upload Banner and cover image */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Cover Photo</label>
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Cover Photo (URL)</label>
                     <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleBannerChange}
-                      className="w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:bg-white/10 file:text-white file:text-xs file:font-semibold"
+                      type="url"
+                      placeholder="https://images.unsplash.com/..."
+                      value={bannerImage}
+                      onChange={(e) => setBannerImage(e.target.value)}
+                      className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gallery (Max 10)</label>
-                    <input
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      onChange={handleGalleryChange}
-                      className="w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:bg-white/10 file:text-white file:text-xs file:font-semibold"
-                    />
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Gallery URLs (1 per line)</label>
+                    <textarea
+                      rows={2}
+                      placeholder="https://images.unsplash.com/..."
+                      value={galleryImages}
+                      onChange={(e) => setGalleryImages(e.target.value)}
+                      className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500"
+                    ></textarea>
                   </div>
                 </div>
               </div>
