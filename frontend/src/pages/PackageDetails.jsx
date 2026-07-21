@@ -44,6 +44,9 @@ export default function PackageDetails() {
           if (res.data.package.slots?.length > 0) {
             setSelectedSlot(res.data.package.slots[0]);
           }
+          if (res.data.package.category === "Vehicle Rental") {
+            setSharing("basePrice");
+          }
         }
       } catch (err) {
         console.error("Error fetching package details:", err);
@@ -89,7 +92,7 @@ export default function PackageDetails() {
   }
 
   // Cost calculations
-  const pricePerPerson = pkg.sharingPrices?.[sharing] || 0;
+  const pricePerPerson = pkg.category === "Vehicle Rental" ? (pkg.basePrice || 0) : (pkg.sharingPrices?.[sharing] || 0);
   const baseCost = pricePerPerson * travelersCount;
   const gstAmount = Math.round(baseCost * 0.05);
   const totalCost = Math.max(0, baseCost + gstAmount - couponDiscount);
@@ -327,23 +330,35 @@ export default function PackageDetails() {
           <div className="rounded-3xl bg-[#f4f3ef] dark:bg-[#111318] border border-[#d1cfc7] dark:border-white/5 p-6 shadow-xl space-y-6 relative overflow-hidden transition-colors">
             <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-brand-500/5 blur-2xl pointer-events-none" />
 
-            <div className="border-b border-[#d1cfc7] dark:border-white/5 pb-4">
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest block font-bold">Trip Pricing Tiers</span>
-              <div className="grid grid-cols-3 gap-2 mt-2 text-center text-xs">
-                <div className={`p-2.5 rounded-xl border cursor-pointer transition-all ${sharing === "doubleSharing" ? "border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-650 dark:text-brand-400" : "border-gray-250 dark:border-white/5 text-slate-500 dark:text-gray-400"}`} onClick={() => setSharing("doubleSharing")}>
-                  <p className="font-bold">Double</p>
-                  <p className="font-outfit font-bold text-slate-900 dark:text-white mt-1">₹{pkg.sharingPrices?.doubleSharing?.toLocaleString("en-IN")}</p>
-                </div>
-                <div className={`p-2.5 rounded-xl border cursor-pointer transition-all ${sharing === "tripleSharing" ? "border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-650 dark:text-brand-400" : "border-gray-250 dark:border-white/5 text-slate-500 dark:text-gray-400"}`} onClick={() => setSharing("tripleSharing")}>
-                  <p className="font-bold">Triple</p>
-                  <p className="font-outfit font-bold text-slate-900 dark:text-white mt-1">₹{pkg.sharingPrices?.tripleSharing?.toLocaleString("en-IN")}</p>
-                </div>
-                <div className={`p-2.5 rounded-xl border cursor-pointer transition-all ${sharing === "quadSharing" ? "border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-650 dark:text-brand-400" : "border-gray-250 dark:border-white/5 text-slate-500 dark:text-gray-400"}`} onClick={() => setSharing("quadSharing")}>
-                  <p className="font-bold">Quad</p>
-                  <p className="font-outfit font-bold text-slate-900 dark:text-white mt-1">₹{pkg.sharingPrices?.quadSharing?.toLocaleString("en-IN")}</p>
+            {pkg.category === "Vehicle Rental" ? (
+              <div className="border-b border-[#d1cfc7] dark:border-white/5 pb-4">
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest block font-bold">Rental Pricing</span>
+                <div className="mt-2 text-center">
+                  <div className="p-3 rounded-xl border border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-650 dark:text-brand-400">
+                    <p className="font-bold">Base Price</p>
+                    <p className="font-outfit font-bold text-slate-900 dark:text-white mt-1">₹{pkg.basePrice?.toLocaleString("en-IN")}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="border-b border-[#d1cfc7] dark:border-white/5 pb-4">
+                <span className="text-[10px] text-gray-500 uppercase tracking-widest block font-bold">Trip Pricing Tiers</span>
+                <div className="grid grid-cols-3 gap-2 mt-2 text-center text-xs">
+                  <div className={`p-2.5 rounded-xl border cursor-pointer transition-all ${sharing === "doubleSharing" ? "border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-650 dark:text-brand-400" : "border-gray-250 dark:border-white/5 text-slate-500 dark:text-gray-400"}`} onClick={() => setSharing("doubleSharing")}>
+                    <p className="font-bold">Double</p>
+                    <p className="font-outfit font-bold text-slate-900 dark:text-white mt-1">₹{pkg.sharingPrices?.doubleSharing?.toLocaleString("en-IN")}</p>
+                  </div>
+                  <div className={`p-2.5 rounded-xl border cursor-pointer transition-all ${sharing === "tripleSharing" ? "border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-650 dark:text-brand-400" : "border-gray-250 dark:border-white/5 text-slate-500 dark:text-gray-400"}`} onClick={() => setSharing("tripleSharing")}>
+                    <p className="font-bold">Triple</p>
+                    <p className="font-outfit font-bold text-slate-900 dark:text-white mt-1">₹{pkg.sharingPrices?.tripleSharing?.toLocaleString("en-IN")}</p>
+                  </div>
+                  <div className={`p-2.5 rounded-xl border cursor-pointer transition-all ${sharing === "quadSharing" ? "border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-650 dark:text-brand-400" : "border-gray-250 dark:border-white/5 text-slate-500 dark:text-gray-400"}`} onClick={() => setSharing("quadSharing")}>
+                    <p className="font-bold">Quad</p>
+                    <p className="font-outfit font-bold text-slate-900 dark:text-white mt-1">₹{pkg.sharingPrices?.quadSharing?.toLocaleString("en-IN")}</p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Booking Form */}
             <form onSubmit={handleBookingSubmit} className="space-y-4">
@@ -367,8 +382,8 @@ export default function PackageDetails() {
               {/* Travelers Count */}
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold uppercase text-gray-500 tracking-wider flex items-center justify-between">
-                  <span>Number of Travelers</span>
-                  <span className="text-brand-650 dark:text-brand-400 text-xs font-outfit">₹{pricePerPerson.toLocaleString("en-IN")} / head</span>
+                  <span>{pkg.category === "Vehicle Rental" ? "Number of Vehicles" : "Number of Travelers"}</span>
+                  <span className="text-brand-650 dark:text-brand-400 text-xs font-outfit">₹{pricePerPerson.toLocaleString("en-IN")} / {pkg.category === "Vehicle Rental" ? "vehicle" : "head"}</span>
                 </label>
                 <div className="flex items-center bg-[#ecebe6]/60 dark:bg-white/5 border border-[#d1cfc7] dark:border-white/5 rounded-xl px-3.5 py-1.5 focus-within:border-brand-500">
                   <Users className="w-4 h-4 text-gray-450 dark:text-gray-500 mr-3 shrink-0" />
@@ -384,7 +399,7 @@ export default function PackageDetails() {
               </div>
 
               {/* Dynamic Additional Names */}
-              {travelersCount > 1 && (
+              {travelersCount > 1 && pkg.category !== "Vehicle Rental" && (
                 <div className="space-y-2 pt-2 border-t border-[#d1cfc7] dark:border-white/5">
                   <label className="text-[10px] font-bold uppercase text-gray-500 tracking-wider flex items-center gap-1.5">
                     <UserPlus className="w-3.5 h-3.5 text-brand-500" /> Co-Travelers Names

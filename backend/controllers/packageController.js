@@ -36,6 +36,7 @@ export const createPackage = async (req, res) => {
       duration,
       description,
       sharingPrices, // JSON object or string
+      basePrice, // Number
       bookingDeposit,
       inclusions, // Array or string
       exclusions, // Array or string
@@ -87,6 +88,7 @@ export const createPackage = async (req, res) => {
       description: description || "",
       bannerImage,
       galleryImages: parsedGallery,
+      basePrice: Number(basePrice) || 0,
       sharingPrices: parsedSharingPrices,
       bookingDeposit: Number(bookingDeposit) || 3000,
       inclusions: parsedInclusions,
@@ -116,6 +118,7 @@ export const updatePackage = async (req, res) => {
       duration,
       description,
       sharingPrices,
+      basePrice,
       bookingDeposit,
       inclusions,
       exclusions,
@@ -131,6 +134,7 @@ export const updatePackage = async (req, res) => {
     if (duration) updateData.duration = duration;
     if (description !== undefined) updateData.description = description;
     if (bookingDeposit) updateData.bookingDeposit = Number(bookingDeposit);
+    if (basePrice !== undefined) updateData.basePrice = Number(basePrice);
     if (bannerImage) updateData.bannerImage = bannerImage;
 
     if (sharingPrices) {

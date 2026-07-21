@@ -12,7 +12,7 @@ const bookingSchema = new mongoose.Schema(
     sharingSelected: {
       type: String,
       required: true,
-      enum: ["doubleSharing", "tripleSharing", "quadSharing"],
+      enum: ["doubleSharing", "tripleSharing", "quadSharing", "basePrice"],
     },
     totalTravelers: { type: Number, required: true, min: 1 },
     travelersList: [{ type: String }], // list of additional traveler names

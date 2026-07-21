@@ -43,6 +43,8 @@ export const createBooking = async (req, res) => {
       pricePerPerson = pkg.sharingPrices.tripleSharing;
     } else if (sharingSelected === "quadSharing") {
       pricePerPerson = pkg.sharingPrices.quadSharing;
+    } else if (sharingSelected === "basePrice") {
+      pricePerPerson = pkg.basePrice;
     } else {
       return res.status(400).json({ success: false, message: "Invalid sharing type selected." });
     }

@@ -18,10 +18,11 @@ export default function Destinations() {
   const [category, setCategory] = useState("Domestic Trips");
   const [duration, setDuration] = useState("");
   const [description, setDescription] = useState("");
-  const [doubleSharing, setDoubleSharing] = useState(0);
-  const [tripleSharing, setTripleSharing] = useState(0);
-  const [quadSharing, setQuadSharing] = useState(0);
-  const [bookingDeposit, setBookingDeposit] = useState(3000);
+  const [doubleSharing, setDoubleSharing] = useState("");
+  const [tripleSharing, setTripleSharing] = useState("");
+  const [quadSharing, setQuadSharing] = useState("");
+  const [basePrice, setBasePrice] = useState("");
+  const [bookingDeposit, setBookingDeposit] = useState("");
   const [inclusionsInput, setInclusionsInput] = useState("");
   const [exclusionsInput, setExclusionsInput] = useState("");
   const [slotsInput, setSlotsInput] = useState("");
@@ -57,10 +58,11 @@ export default function Destinations() {
     setCategory("Domestic Trips");
     setDuration("");
     setDescription("");
-    setDoubleSharing(0);
-    setTripleSharing(0);
-    setQuadSharing(0);
-    setBookingDeposit(3000);
+    setDoubleSharing("");
+    setTripleSharing("");
+    setQuadSharing("");
+    setBasePrice("");
+    setBookingDeposit("");
     setInclusionsInput("");
     setExclusionsInput("");
     setSlotsInput("");
@@ -101,10 +103,11 @@ export default function Destinations() {
     setCategory(pkg.category);
     setDuration(pkg.duration);
     setDescription(pkg.description || "");
-    setDoubleSharing(pkg.sharingPrices?.doubleSharing || 0);
-    setTripleSharing(pkg.sharingPrices?.tripleSharing || 0);
-    setQuadSharing(pkg.sharingPrices?.quadSharing || 0);
-    setBookingDeposit(pkg.bookingDeposit || 3000);
+    setDoubleSharing(pkg.sharingPrices?.doubleSharing || "");
+    setTripleSharing(pkg.sharingPrices?.tripleSharing || "");
+    setQuadSharing(pkg.sharingPrices?.quadSharing || "");
+    setBasePrice(pkg.basePrice || "");
+    setBookingDeposit(pkg.bookingDeposit || "");
     setInclusionsInput(pkg.inclusions?.join("\n") || "");
     setExclusionsInput(pkg.exclusions?.join("\n") || "");
     setSlotsInput(pkg.slots?.join(", ") || "");
@@ -152,6 +155,7 @@ export default function Destinations() {
         tripleSharing: Number(tripleSharing) || 0,
         quadSharing: Number(quadSharing) || 0,
       },
+      basePrice: Number(basePrice) || 0,
       bookingDeposit: Number(bookingDeposit),
       inclusions: inclusionsInput.split("\n").map(str => str.trim()).filter(Boolean),
       exclusions: exclusionsInput.split("\n").map(str => str.trim()).filter(Boolean),
@@ -269,55 +273,6 @@ export default function Destinations() {
               ></textarea>
             </div>
 
-            {/* Pricing details */}
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 pt-4 border-t border-white/5">
-              
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Double Sharing (₹)</label>
-                <input
-                  type="number"
-                  required
-                  value={doubleSharing}
-                  onChange={(e) => setDoubleSharing(Number(e.target.value))}
-                  className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Triple Sharing (₹)</label>
-                <input
-                  type="number"
-                  required
-                  value={tripleSharing}
-                  onChange={(e) => setTripleSharing(Number(e.target.value))}
-                  className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Quad Sharing (₹)</label>
-                <input
-                  type="number"
-                  required
-                  value={quadSharing}
-                  onChange={(e) => setQuadSharing(Number(e.target.value))}
-                  className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Booking Deposit (₹)</label>
-                <input
-                  type="number"
-                  required
-                  value={bookingDeposit}
-                  onChange={(e) => setBookingDeposit(Number(e.target.value))}
-                  className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500"
-                />
-              </div>
-
-            </div>
-
             {/* List and slots settings */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-white/5">
               
@@ -355,6 +310,77 @@ export default function Destinations() {
                   />
                 </div>
 
+                {/* Pricing Details */}
+                {category === "Vehicle Rental" ? (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Base / Rental Price (₹)</label>
+                      <input
+                        type="number"
+                        placeholder="1500"
+                        value={basePrice}
+                        onChange={(e) => setBasePrice(e.target.value)}
+                        className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Booking Deposit (₹)</label>
+                      <input
+                        type="number"
+                        required
+                        placeholder="1000"
+                        value={bookingDeposit}
+                        onChange={(e) => setBookingDeposit(e.target.value)}
+                        className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-4 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Double Sharing (₹)</label>
+                      <input
+                        type="number"
+                        placeholder="15000"
+                        value={doubleSharing}
+                        onChange={(e) => setDoubleSharing(e.target.value)}
+                        className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Triple Sharing (₹)</label>
+                      <input
+                        type="number"
+                        placeholder="14000"
+                        value={tripleSharing}
+                        onChange={(e) => setTripleSharing(e.target.value)}
+                        className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Quad Sharing (₹)</label>
+                      <input
+                        type="number"
+                        placeholder="13000"
+                        value={quadSharing}
+                        onChange={(e) => setQuadSharing(e.target.value)}
+                        className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Booking Deposit (₹)</label>
+                      <input
+                        type="number"
+                        required
+                        placeholder="3000"
+                        value={bookingDeposit}
+                        onChange={(e) => setBookingDeposit(e.target.value)}
+                        className="w-full bg-white/5 border border-white/5 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-brand-500"
+                      />
+                    </div>
+                  </div>
+                )}
+                
                 {/* Upload Banner and cover image */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">

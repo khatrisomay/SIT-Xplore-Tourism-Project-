@@ -60,8 +60,8 @@ export default function Home() {
       return matchesCategory && matchesSearch;
     })
     .sort((a, b) => {
-      const priceA = a.sharingPrices?.quadSharing || a.sharingPrices?.doubleSharing || 0;
-      const priceB = b.sharingPrices?.quadSharing || b.sharingPrices?.doubleSharing || 0;
+      const priceA = a.category === "Vehicle Rental" ? a.basePrice : (a.sharingPrices?.quadSharing || a.sharingPrices?.doubleSharing || 0);
+      const priceB = b.category === "Vehicle Rental" ? b.basePrice : (b.sharingPrices?.quadSharing || b.sharingPrices?.doubleSharing || 0);
       return priceA - priceB;
     });
 
@@ -159,8 +159,10 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPackages.map((pkg) => {
-              // Starting price tier is standard/quad sharing rate
-              const startingPrice = pkg.sharingPrices?.quadSharing || pkg.sharingPrices?.doubleSharing || 0;
+              // Starting price tier
+              const startingPrice = pkg.category === "Vehicle Rental" 
+                ? pkg.basePrice 
+                : (pkg.sharingPrices?.quadSharing || pkg.sharingPrices?.doubleSharing || 0);
               return (
                 <article
                   key={pkg._id}

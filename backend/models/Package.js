@@ -24,6 +24,7 @@ const packageSchema = new mongoose.Schema(
     description: { type: String, default: "" },
     bannerImage: { type: String, required: true }, // Cover URL path
     galleryImages: [{ type: String }], // Itinerary/detail image paths
+    basePrice: { type: Number, default: 0 }, // For non-sharing entities like Vehicle Rentals
     sharingPrices: { type: sharingPricesSchema, required: true },
     bookingDeposit: { type: Number, required: true, default: 3000 }, // per traveler deposit
     inclusions: [{ type: String }],
