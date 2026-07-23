@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /admin/
+
+  # Do not rewrite existing physical files or directories inside /admin
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+
+  # Rewrite all other admin routes to /admin/index.html
+  RewriteRule . /admin/index.html [L]
+</IfModule>
